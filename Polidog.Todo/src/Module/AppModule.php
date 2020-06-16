@@ -26,14 +26,11 @@ class AppModule extends AbstractAppModule
         if (file_exists($env)) {
             (new Loader($env))->parse()->putenv(true);
         }
-
         // Database
         $dbConfig = 'sqlite:' . dirname(dirname(__DIR__)). '/var/db/todo.sqlite3';
         $this->install(new AuraSqlModule($dbConfig));
-
         // Form
         $this->install(new AuraInputModule());
-
         $this->bind(TodoForm::class);
         $this->bind(FormInterface::class)->annotatedWith('todo_form')->to(TodoForm::class);
 

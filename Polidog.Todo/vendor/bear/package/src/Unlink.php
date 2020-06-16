@@ -28,9 +28,7 @@ final class Unlink
         foreach ((array) glob(rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '*') as $file) {
             is_dir((string) $file) ? $this->__invoke((string) $file) : unlink((string) $file);
 
-if (file_exists ( (string) $file)){
-  @rmdir((string) $file);
-}
+            @rmdir((string) $file);
 
         }
     }
