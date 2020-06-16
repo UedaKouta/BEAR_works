@@ -10,7 +10,7 @@ use Ray\Di\Injector;
 
 class AppTest extends TestCase
 {
-    public function testGet() : void
+    public function testGet()
     {
         $app = new AppAdapter(new Injector, 'FakeVendor\Sandbox');
         $ro = $app->get(new Uri('page://self/index'));

@@ -8,42 +8,42 @@ use PHPUnit\Framework\TestCase;
 
 class NullRequestTest extends TestCase
 {
-    public function testWithQuery() : void
+    public function testWithQuery()
     {
         $request = (new NullRequest)->withQuery([]);
         $this->assertInstanceOf(NullRequest::class, $request);
     }
 
-    public function testAddQuery() : void
+    public function testAddQuery()
     {
         $request = (new NullRequest)->addQuery([]);
         $this->assertInstanceOf(NullRequest::class, $request);
     }
 
-    public function testlinkSelf() : void
+    public function testlinkSelf()
     {
         $request = (new NullRequest)->linkSelf('');
         $this->assertInstanceOf(NullRequest::class, $request);
     }
 
-    public function testlinkNew() : void
+    public function testlinkNew()
     {
         $request = (new NullRequest)->linkNew('');
         $this->assertInstanceOf(NullRequest::class, $request);
     }
 
-    public function testlinkCrawl() : void
+    public function testlinkCrawl()
     {
         $request = (new NullRequest)->linkCrawl('');
         $this->assertInstanceOf(NullRequest::class, $request);
     }
 
-    public function testToUri() : void
+    public function testToUri()
     {
         $this->assertSame('app://self/index', (new NullRequest)->toUri());
     }
 
-    public function testToUriWithMethod() : void
+    public function testToUriWithMethod()
     {
         $this->assertSame('get app://self/index', (new NullRequest)->toUriWithMethod());
     }

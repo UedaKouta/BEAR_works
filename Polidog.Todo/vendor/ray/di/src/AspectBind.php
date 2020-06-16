@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ray\Di;
 
 use Ray\Aop\Bind as AopBind;
-use Ray\Aop\MethodInterceptor;
 
 final class AspectBind
 {
@@ -21,24 +20,17 @@ final class AspectBind
 
     /**
      * Instantiate interceptors
-     *
-     * @return array<string, array<MethodInterceptor>>
      */
     public function inject(Container $container) : array
     {
+        /** @var array<array<class-string>> $bindings */
         $bindings = $this->bind->getBindings();
-        $instanciatedBindings = [];
-        foreach ($bindings as $methodName => $interceptorClassNames) {
-            $interceptors = [];
-            foreach ($interceptorClassNames as &$interceptorClassName) {
-                assert(is_string($interceptorClassName));
-                /** @var MethodInterceptor $interceptor */
-                $interceptor = $container->getInstance($interceptorClassName, Name::ANY);
-                $interceptors[] = $interceptor;
+        foreach ($bindings as &$interceptors) {
+            foreach ($interceptors as &$interceptor) {
+                $interceptor = $container->getInstance($interceptor, Name::ANY);
             }
-            $instanciatedBindings[$methodName] = $interceptors;
         }
 
-        return $instanciatedBindings;
+        return $bindings;
     }
 }

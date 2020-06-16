@@ -23,7 +23,7 @@ class DependencyCompilerTest extends TestCase
         delete_dir($_ENV['TMP_DIR']);
     }
 
-    public function testInstanceCompileString() : void
+    public function testInstanceCompileString()
     {
         $dependencyInstance = new Instance('bear');
         $code = (new DependencyCode(new Container))->getCode($dependencyInstance);
@@ -35,7 +35,7 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testInstanceCompileInt() : void
+    public function testInstanceCompileInt()
     {
         $dependencyInstance = new Instance(1);
         $code = (new DependencyCode(new Container))->getCode($dependencyInstance);
@@ -47,7 +47,7 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testInstanceCompileArray() : void
+    public function testInstanceCompileArray()
     {
         $dependencyInstance = new Instance([1, 2, 3]);
         $code = (new DependencyCode(new Container))->getCode($dependencyInstance);
@@ -59,7 +59,7 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testDependencyCompile() : void
+    public function testDependencyCompile()
     {
         $container = (new FakeCarModule)->getContainer();
         $dependency = $container->getContainer()['Ray\Compiler\FakeCarInterface-' . Name::ANY];
@@ -83,7 +83,7 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testDependencyProviderCompile() : void
+    public function testDependencyProviderCompile()
     {
         $container = (new FakeCarModule())->getContainer();
         $dependency = $container->getContainer()['Ray\Compiler\FakeHandleInterface-' . Name::ANY];
@@ -100,7 +100,7 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testDependencyInstanceCompile() : void
+    public function testDependencyInstanceCompile()
     {
         $container = (new FakeCarModule)->getContainer();
         $dependency = $container->getContainer()['-logo'];
@@ -113,7 +113,7 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testDependencyObjectInstanceCompile() : void
+    public function testDependencyObjectInstanceCompile()
     {
         $container = (new FakeCarModule)->getContainer();
         $dependency = new Instance(new FakeEngine());
@@ -126,13 +126,13 @@ EOT;
         $this->assertSame($expected, (string) $code);
     }
 
-    public function testDomainException() : void
+    public function testDomainException()
     {
         $this->expectException(\DomainException::class);
         (new DependencyCode(new Container))->getCode(new FakeInvalidDependency);
     }
 
-    public function testContextualProviderCompile() : void
+    public function testContextualProviderCompile()
     {
         $container = (new FakeContextualModule('context'))->getContainer();
         $dependency = $container->getContainer()['Ray\Compiler\FakeRobotInterface-' . Name::ANY];

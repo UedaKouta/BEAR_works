@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ray\Compiler;
 
-use Ray\Aop\ReflectionMethod;
 use Ray\Di\InjectionPointInterface;
 
 final class InjectionPoint implements InjectionPointInterface
@@ -19,7 +18,7 @@ final class InjectionPoint implements InjectionPointInterface
      */
     private $scriptDir;
 
-    public function __construct(\ReflectionParameter $parameter, string $scriptDir)
+    public function __construct(\ReflectionParameter $parameter, $scriptDir)
     {
         $this->parameter = $parameter;
         $this->scriptDir = $scriptDir;
@@ -38,10 +37,7 @@ final class InjectionPoint implements InjectionPointInterface
      */
     public function getMethod() : \ReflectionMethod
     {
-        $reflectionMethod = $this->parameter->getDeclaringFunction();
-        assert($reflectionMethod instanceof ReflectionMethod);
-
-        return $reflectionMethod;
+        return $this->parameter->getDeclaringFunction();
     }
 
     /**
@@ -59,9 +55,6 @@ final class InjectionPoint implements InjectionPointInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return array<null|object>
-     * @psalm-suppress ImplementedReturnTypeMismatch
      */
     public function getQualifiers() : array
     {
@@ -70,8 +63,6 @@ final class InjectionPoint implements InjectionPointInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return null|object
      */
     public function getQualifier()
     {
@@ -87,7 +78,7 @@ final class InjectionPoint implements InjectionPointInterface
             $this->parameter->name
         );
         if (! \file_exists($qualifierFile)) {
-            return null;
+            return;
         }
         $qualifier = \file_get_contents($qualifierFile);
         if (\is_bool($qualifier)) {

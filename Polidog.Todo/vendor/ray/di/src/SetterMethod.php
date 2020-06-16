@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Ray\Di;
 
-use function call_user_func_array;
-use Exception;
 use function is_callable;
-use LogicException;
 use Ray\Di\Exception\Unbound;
-use ReflectionMethod;
 
 final class SetterMethod
 {
@@ -30,7 +26,7 @@ final class SetterMethod
      */
     private $isOptional = false;
 
-    public function __construct(ReflectionMethod $method, Name $name)
+    public function __construct(\ReflectionMethod $method, Name $name)
     {
         $this->method = $method->name;
         $this->arguments = new Arguments($method, $name);
@@ -40,7 +36,7 @@ final class SetterMethod
      * @param object $instance
      *
      * @throws Unbound
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke($instance, Container $container) : void
     {
@@ -55,10 +51,10 @@ final class SetterMethod
         }
         $callable = [$instance, $this->method];
         if (! is_callable($callable)) {
-            throw new LogicException; // @codeCoverageIgnore
+            throw new \LogicException; // @codeCoverageIgnore
         }
 
-        call_user_func_array($callable, $parameters);
+        \call_user_func_array($callable, $parameters);
     }
 
     public function setOptional() : void

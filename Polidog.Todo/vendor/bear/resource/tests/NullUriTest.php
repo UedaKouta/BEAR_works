@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class NullUriTest extends TestCase
 {
-    public function test__toString() : void
+    public function test__toString()
     {
         $this->assertSame('app://self/index', (string) new NullUri);
     }

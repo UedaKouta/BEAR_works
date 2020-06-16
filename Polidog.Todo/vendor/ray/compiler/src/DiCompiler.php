@@ -42,11 +42,6 @@ final class DiCompiler implements InjectorInterface
      */
     private $dependencySaver;
 
-    /**
-     * @var FilePutContents
-     */
-    private $filePutContents;
-
     public function __construct(AbstractModule $module = null, string $scriptDir = '')
     {
         $this->scriptDir = $scriptDir ?: \sys_get_temp_dir();
@@ -55,7 +50,6 @@ final class DiCompiler implements InjectorInterface
         $this->dependencyCompiler = new DependencyCode($this->container);
         $this->module = $module;
         $this->dependencySaver = new DependencySaver($scriptDir);
-        $this->filePutContents = new FilePutContents;
     }
 
     /**
@@ -71,7 +65,7 @@ final class DiCompiler implements InjectorInterface
     /**
      * Compile all dependencies in container
      */
-    public function compile() : void
+    public function compile()
     {
         $container = $this->container->getContainer();
         foreach ($container as $dependencyIndex => $dependency) {
@@ -79,20 +73,20 @@ final class DiCompiler implements InjectorInterface
             ($this->dependencySaver)($dependencyIndex, $code);
         }
         $this->savePointcuts($this->container);
-        ($this->filePutContents)($this->scriptDir . ScriptInjector::MODULE, \serialize($this->module));
+        \file_put_contents($this->scriptDir . ScriptInjector::MODULE, \serialize($this->module));
     }
 
-    public function dumpGraph() : void
+    public function dumpGraph()
     {
         $dumper = new GraphDumper($this->container, $this->scriptDir);
         $dumper();
     }
 
-    public function savePointcuts(Container $container) : void
+    public function savePointcuts(Container $container)
     {
         $ref = (new \ReflectionProperty($container, 'pointcuts'));
         $ref->setAccessible(true);
         $pointcuts = $ref->getValue($container);
-        ($this->filePutContents)($this->scriptDir . ScriptInjector::AOP, \serialize($pointcuts));
+        \file_put_contents($this->scriptDir . ScriptInjector::AOP, \serialize($pointcuts));
     }
 }

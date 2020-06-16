@@ -52,8 +52,6 @@ final class Normalizer
     /**
      * Return array or object node
      *
-     * @param array<mixed>|mixed|object $value
-     *
      * @return Expr\Array_|Expr\FuncCall
      */
     private function noScalar($value) : Expr
@@ -65,7 +63,7 @@ final class Normalizer
             return $this->normalizeObject($value);
         }
 
-        throw new InvalidInstance;
+        throw new InvalidInstance; //@codeCoverageIgnore
     }
 
     /**
@@ -85,8 +83,6 @@ final class Normalizer
 
     /**
      * Return array value node
-     *
-     * @param array<int, mixed> $value
      */
     private function arrayValue($value) : Expr\Array_
     {

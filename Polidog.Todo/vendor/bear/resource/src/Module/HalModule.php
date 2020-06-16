@@ -13,7 +13,7 @@ class HalModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure() : void
+    protected function configure()
     {
         $this->bind(RenderInterface::class)->to(HalRenderer::class);
     }

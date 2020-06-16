@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use LogicException;
-use ReflectionClass;
-use ReflectionMethod;
-
 final class Meta
 {
-    private const EXTRAS_VENDOR = 'vendor';
+    const EXTRAS_VENDOR = 'vendor';
 
-    private const EXTRAS_PACKAGE = 'package';
+    const EXTRAS_PACKAGE = 'package';
 
     /**
      * @var string
@@ -25,7 +21,7 @@ final class Meta
     public $options;
 
     /**
-     * @var array{vendor?: string, package?: string}
+     * @var array
      */
     public $extras = [];
 
@@ -39,8 +35,8 @@ final class Meta
     {
         $classPath = explode('\\', $class);
         // $class
-        $this->extras[self::EXTRAS_VENDOR] = (string) array_shift($classPath);
-        $this->extras[self::EXTRAS_PACKAGE] = (string) array_shift($classPath);
+        $this->extras[self::EXTRAS_VENDOR] = array_shift($classPath);
+        $this->extras[self::EXTRAS_PACKAGE] = array_shift($classPath);
         array_shift($classPath); // "/Resource/"
         $scheme = array_shift($classPath);
 
@@ -53,9 +49,9 @@ final class Meta
     private function getOptions(string $class) : Options
     {
         if (! class_exists($class)) {
-            throw new LogicException; // @codeCoverageIgnore
+            throw new \LogicException; // @codeCoverageIgnore
         }
-        $ref = new ReflectionClass($class);
+        $ref = new \ReflectionClass($class);
         $allows = $this->getAllows($ref->getMethods());
         $params = [];
         foreach ($allows as $method) {
@@ -66,11 +62,7 @@ final class Meta
     }
 
     /**
-     * @param ReflectionMethod[] $methods
-     *
-     * @return string[]
-     *
-     * @psalm-return list<string>
+     * @param \ReflectionMethod[] $methods
      */
     private function getAllows(array $methods) : array
     {
@@ -87,7 +79,7 @@ final class Meta
 
     private function getParams(string $class, string $method) : Params
     {
-        $refMethod = new ReflectionMethod($class, 'on' . $method);
+        $refMethod = new \ReflectionMethod($class, 'on' . $method);
         $parameters = $refMethod->getParameters();
         $optionalParams = $requiredParams = [];
         foreach ($parameters as $parameter) {

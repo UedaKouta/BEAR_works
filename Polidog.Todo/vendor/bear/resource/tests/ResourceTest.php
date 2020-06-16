@@ -31,7 +31,7 @@ class ResourceTest extends TestCase
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
-    public function testManualConstruction() : void
+    public function testManualConstruction()
     {
         $injector = new Injector(new NullModule, __DIR__ . '/tmp');
         $reader = new AnnotationReader;
@@ -46,31 +46,31 @@ class ResourceTest extends TestCase
         $this->assertInstanceOf(ResourceInterface::class, $resource);
     }
 
-    public function testNewInstance() : void
+    public function testNewInstance()
     {
         $instance = $this->resource->newInstance('page://self/index');
         $this->assertInstanceOf(Index::class, $instance);
     }
 
-    public function testLazyRequest() : void
+    public function testLazyRequest()
     {
         $instance = $this->resource->get->uri('page://self/index')->request();
         $this->assertInstanceOf(Request::class, $instance);
     }
 
-    public function testEagerRequest() : void
+    public function testEagerRequest()
     {
         $instance = $this->resource->get->uri('page://self/index')->eager->request();
         $this->assertInstanceOf(Index::class, $instance);
     }
 
-    public function testWithQueryRequest() : void
+    public function testWithQueryRequest()
     {
         $instance = $this->resource->get->uri('page://self/index')->withQuery(['id' => 1])->eager->request();
         $this->assertSame(1, $instance->body);
     }
 
-    public function testWithAddRequestOverrideQuery() : void
+    public function testWithAddRequestOverrideQuery()
     {
         $instance = $this->resource->get->uri('page://self/index')->withQuery(['id' => 1])->addQuery(
             ['id' => 2]
@@ -78,7 +78,7 @@ class ResourceTest extends TestCase
         $this->assertSame(2, $instance->body);
     }
 
-    public function testObject() : void
+    public function testObject()
     {
         $ro = new Index;
         $ro->uri = new Uri('page://self/index');
@@ -86,14 +86,14 @@ class ResourceTest extends TestCase
         $this->assertInstanceOf(Index::class, $instance);
     }
 
-    public function testHref() : void
+    public function testHref()
     {
         $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->eager->request();
         $blog = $this->resource->href('blog');
         $this->assertInstanceOf(Blog::class, $blog);
     }
 
-    public function testHrefInResourceObject() : void
+    public function testHrefInResourceObject()
     {
         $origin = $this->resource->get->uri('app://self/href/origin')->withQuery(['id' => 1])->eager->request();
         $this->assertInstanceOf(Origin::class, $origin);
@@ -102,7 +102,7 @@ class ResourceTest extends TestCase
         $this->assertSame($next['id'], 1);
     }
 
-    public function testHrefInResourceObjectHasEmbed() : void
+    public function testHrefInResourceObjectHasEmbed()
     {
         $origin = $this->resource->get->uri('app://self/href/hasembed')->withQuery(['id' => 1])->eager->request();
         $this->assertInstanceOf(Hasembed::class, $origin);
@@ -111,10 +111,10 @@ class ResourceTest extends TestCase
         $this->assertSame($next['id'], 1);
     }
 
-    public function testLinkSelf() : void
+    public function testLinkSelf()
     {
         $request = $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->linkSelf('blog')->request();
-        assert($request instanceof Request);
+        /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::SELF_LINK, $request->links[0]->type);
         $ro = $request();
@@ -123,10 +123,10 @@ class ResourceTest extends TestCase
         $this->assertSame(['id' => 12, 'name' => 'Aramis blog'], $ro->body);
     }
 
-    public function testLinkNew() : void
+    public function testLinkNew()
     {
         $request = $this->resource->get->uri('app://self/author')->withQuery(['id' => 1])->linkNew('blog')->request();
-        assert($request instanceof Request);
+        /* @var $request Request */
         $this->assertSame('blog', $request->links[0]->key);
         $this->assertSame(LinkType::NEW_LINK, $request->links[0]->type);
         $ro = $request();
@@ -142,13 +142,10 @@ class ResourceTest extends TestCase
         );
     }
 
-    /**
-     * @return array<string, array|int|string>
-     */
-    public function testLinkCrawl() : array
+    public function testLinkCrawl()
     {
         $request = $this->resource->get->uri('app://self/blog')->withQuery(['id' => 11])->linkCrawl('tree')->request();
-        assert($request instanceof Request);
+        /* @var $request Request */
         $this->assertSame('tree', $request->links[0]->key);
         $this->assertSame(LinkType::CRAWL_LINK, $request->links[0]->type);
         $ro = $request();
@@ -204,7 +201,7 @@ class ResourceTest extends TestCase
         return $expected;
     }
 
-    public function testHal() : void
+    public function testHal()
     {
         $resource = (new Injector(new HalModule(new ResourceModule('FakeVendor\Sandbox')), __DIR__ . '/tmp'))->getInstance(
             'BEAR\Resource\ResourceInterface'
@@ -227,13 +224,13 @@ class ResourceTest extends TestCase
         $this->assertSame($expected, (string) $user);
     }
 
-    public function testConstructorHasAnotherResourceRequest() : void
+    public function testConstructorHasAnotherResourceRequest()
     {
         $body = $this->resource->post->uri('app://self/holder')->eager->request()->body;
         $this->assertTrue($body);
     }
 
-    public function testAssistedParameter() : ResourceInterface
+    public function testAssistedParameter()
     {
         $injector = new Injector(new FakeAssistedModule(new FakeSchemeModule(new ResourceModule('FakeVendor\Sandbox'))), __DIR__ . '/tmp');
         $this->resource = $injector->getInstance(ResourceInterface::class);
@@ -247,57 +244,57 @@ class ResourceTest extends TestCase
     /**
      * @depends testAssistedParameter
      */
-    public function testPreventAssistedParameterOverride(ResourceInterface $resource) : void
+    public function testPreventAssistedParameterOverride(ResourceInterface $resource)
     {
         $ro = $resource->get->uri('page://self/assist')->withQuery(['login_id' => '_WILL_BE_IGNORED_'])->eager->request();
         /* @var $ro \BEAR\Resource\ResourceObject */
         $this->assertSame('login_id:assisted01', $ro->body);
     }
 
-    public function testGet() : void
+    public function testGet()
     {
         $ro = $this->resource->get('page://self/index', ['id' => 1]);
         $this->assertSame(1, $ro->body);
     }
 
-    public function testPost() : void
+    public function testPost()
     {
         $ro = $this->resource->post('page://self/index', ['name' => 'bear']);
         $this->assertSame('post bear', $ro->body);
     }
 
-    public function testPut() : void
+    public function testPut()
     {
         $ro = $this->resource->put('page://self/index', ['name' => 'bear']);
         $this->assertSame('put bear', $ro->body);
     }
 
-    public function testPatch() : void
+    public function testPatch()
     {
         $ro = $this->resource->patch('page://self/index', ['name' => 'bear']);
         $this->assertSame('patch bear', $ro->body);
     }
 
-    public function testDelete() : void
+    public function testDelete()
     {
         $ro = $this->resource->delete('page://self/index', ['name' => 'bear']);
         $this->assertSame('delete bear', $ro->body);
     }
 
-    public function testHead() : void
+    public function testHead()
     {
         $ro = $this->resource->head('page://self/index', ['name' => 'bear']);
         $this->assertSame('1', $ro->headers['X-BEAR']);
         $this->assertNull($ro->body);
     }
 
-    public function testHeadNotAllowed() : void
+    public function testHeadNotAllowed()
     {
         $this->expectException(MethodNotAllowedException::class);
         $this->resource->head('page://self/hello-world');
     }
 
-    public function testMultipleRequest() : void
+    public function testMultipleRequest()
     {
         $view = (string) $this->resource->get('/fake-loop');
         $expected = '{

@@ -9,7 +9,7 @@ require __DIR__ . '/bootstrap.php';
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
 
-$compiler = new Compiler(__DIR__ . '/tmp');
+$compiler = new Compiler($_ENV['TMP_DIR']);
 $bind = (new Bind)->bindInterceptors(
     'chargeOrder',        // method name
     [new WeekendBlocker]  // interceptors
@@ -20,6 +20,6 @@ try {
     echo $billingService->chargeOrder();
     exit(0);
 } catch (\RuntimeException $e) {
-    echo $e->getMessage() . PHP_EOL;
+    echo $e->getMessage() . "\n";
     exit(1);
 }

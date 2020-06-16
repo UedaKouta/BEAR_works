@@ -4,27 +4,31 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use ArrayAccess;
-use ArrayIterator;
 use BEAR\Resource\Exception\MethodException;
 use BEAR\Resource\Exception\OutOfBoundsException;
-use Exception;
-use IteratorAggregate;
-use LogicException;
-use Serializable;
 
 /**
- * @property int    $code
+ * @property string $code
  * @property array  $headers
  * @property mixed  $body
  * @property string $view
- *
- * @phpstan-implements IteratorAggregate<string, mixed>
- * @phpstan-implements ArrayAccess<string, mixed>
- * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractRequest implements RequestInterface, ArrayAccess, IteratorAggregate, Serializable
+abstract class AbstractRequest implements RequestInterface, \ArrayAccess, \IteratorAggregate, \Serializable
 {
+    const GET = 'get';
+
+    const POST = 'post';
+
+    const PUT = 'put';
+
+    const PATCH = 'patch';
+
+    const DELETE = 'delete';
+
+    const HEAD = 'head';
+
+    const OPTIONS = 'options';
+
     /**
      * URI
      *
@@ -42,28 +46,28 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Query
      *
-     * @var array<string, mixed>
+     * @var array
      */
     public $query = [];
 
     /**
      * Options
      *
-     * @var array<mixed>
+     * @var array
      */
     public $options = [];
 
     /**
      * Request option (eager or lazy)
      *
-     * @var 'eager'|'lazy'
+     * @var string
      */
-    public $in = 'lazy';
+    public $in;
 
     /**
      * Links
      *
-     * @var LinkType[]
+     * @var \BEAR\Resource\LinkType[]
      */
     public $links = [];
 
@@ -75,7 +79,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     /**
      * Request Result
      *
-     * @var ?ResourceObject
+     * @var ResourceObject
      */
     protected $result;
 
@@ -85,14 +89,11 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     protected $invoker;
 
     /**
-     * @var ?LinkerInterface
+     * @var null|LinkerInterface
      */
     private $linker;
 
     /**
-     * @param array<string, mixed> $query
-     * @param list<LinkType>       $links
-     *
      * @throws MethodException
      */
     public function __construct(
@@ -105,7 +106,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
     ) {
         $this->invoker = $invoker;
         $this->resourceObject = $ro;
-        if (! in_array(strtolower($method), ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'], true)) {
+        if (! in_array(strtolower($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS], true)) {
             throw new MethodException($method, 400);
         }
         $this->method = $method;
@@ -120,7 +121,7 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
             $this->invoke();
 
             return (string) $this->result;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             trigger_error($e->getMessage() . PHP_EOL . $e->getTraceAsString(), E_USER_ERROR);
 
             return '';
@@ -129,8 +130,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritdoc}
-     *
-     * @param array<string, mixed> $query
      */
     public function __invoke(array $query = null) : ResourceObject
     {
@@ -147,8 +146,6 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
     public function __get(string $name)
     {
@@ -197,44 +194,36 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
      * {@inheritdoc}
      *
      * @throws OutOfBoundsException
-     *
-     * @return mixed
      */
     public function offsetGet($offset)
     {
         $this->invoke();
-        assert($this->result instanceof ResourceObject);
         if (! isset($this->result->body[$offset])) {
-            throw new OutOfBoundsException("[{$offset}] for object[" . get_class($this->result) . ']', 400);
+            throw new OutOfBoundsException("[${offset}] for object[" . get_class($this->result) . ']', 400);
         }
-        if (is_array($this->result->body)) {
-            return $this->result->body[$offset];
-        }
+
+        return $this->result->body[$offset];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset)
     {
         $this->invoke();
-        assert($this->result instanceof ResourceObject);
 
         return isset($this->result->body[$offset]);
     }
 
     /**
-     * Invoke resource request then return resource body iterator
-     *
-     * @phpstan-return ArrayIterator<string, mixed>
-     * @psalm-return ArrayIterator
+     * {@inheritdoc}
      */
-    public function getIterator() : ArrayIterator
+    public function getIterator()
     {
         $this->invoke();
-        assert($this->result instanceof ResourceObject);
+        $isArray = (is_array($this->result->body) || $this->result->body instanceof \Traversable);
 
-        return is_array($this->result->body) ? new ArrayIterator($this->result->body) : new ArrayIterator([]);
+        return $isArray ? new \ArrayIterator($this->result->body) : new \ArrayIterator([]);
     }
 
     /**
@@ -247,22 +236,18 @@ abstract class AbstractRequest implements RequestInterface, ArrayAccess, Iterato
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function serialize()
     {
-        throw new LogicException(__METHOD__ . ' not supported');
+        throw new \LogicException(__METHOD__ . ' not supported');
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param string $serialized
      */
-    public function unserialize($serialized) : void
+    public function unserialize($serialized)
     {
-        throw new LogicException(__METHOD__ . ' not supported');
+        throw new \LogicException(__METHOD__ . ' not supported');
     }
 
     private function invoke() : ResourceObject

@@ -6,6 +6,7 @@ namespace Ray\Compiler;
 
 use Koriym\Printo\Printo;
 use Ray\Di\Container;
+use Ray\Di\DependencyInterface;
 use Ray\Di\Name;
 
 final class GraphDumper
@@ -26,18 +27,21 @@ final class GraphDumper
         $this->scriptDir = $scriptDir;
     }
 
-    public function __invoke() : void
+    public function __invoke()
     {
         $container = $this->container->getContainer();
         foreach ($container as $dependencyIndex => $dependency) {
-            $isNotInjector = $dependencyIndex !== 'Ray\Di\InjectorInterface-' . Name::ANY;
-            if ($isNotInjector) {
+            $isNorInjector = $dependencyIndex !== 'Ray\Di\InjectorInterface-' . Name::ANY;
+            if ($dependency instanceof DependencyInterface && $isNorInjector) {
                 $this->write($dependencyIndex);
             }
         }
     }
 
-    private function write(string $dependencyIndex) : void
+    /**
+     * Write html
+     */
+    private function write(string $dependencyIndex)
     {
         if ($dependencyIndex === 'Ray\Aop\MethodInvocation-') {
             return;
@@ -53,6 +57,6 @@ final class GraphDumper
             \mkdir($graphDir);
         }
         $file = $graphDir . \str_replace('\\', '_', $dependencyIndex) . '.html';
-        \file_put_contents($file, $graph, LOCK_EX);
+        \file_put_contents($file, $graph);
     }
 }

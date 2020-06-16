@@ -22,37 +22,37 @@ class BindTest extends TestCase
         $this->bind = new Bind(new Container, FakeTyreInterface::class);
     }
 
-    public function testGetBound() : void
+    public function testGetBound()
     {
         $this->bind->to(FakeTyre::class);
         $bound = $this->bind->getBound();
         $this->assertInstanceOf(Dependency::class, $bound);
     }
 
-    public function testToString() : void
+    public function testToString()
     {
         $this->assertSame('Ray\Di\FakeTyreInterface-' . Name::ANY, (string) $this->bind);
     }
 
-    public function testInvalidToTest() : void
+    public function testInvalidToTest()
     {
         $this->expectException(Notfound::class);
         $this->bind->to('invalid-class');
     }
 
-    public function testInvalidToProviderTest() : void
+    public function testInvalidToProviderTest()
     {
         $this->expectException(Notfound::class);
-        $this->bind->toProvider('invalid-class'); // @phpstan-ignore-line
+        $this->bind->toProvider('invalid-class');
     }
 
-    public function testInValidInterfaceBinding() : void
+    public function testInValidInterfaceBinding()
     {
         $this->expectException(NotFound::class);
         new Bind(new Container, 'invalid-interface');
     }
 
-    public function testUntargetedBind() : void
+    public function testUntargetedBind()
     {
         $container = new Container;
         $bind = new Bind($container, FakeEngine::class);
@@ -61,7 +61,7 @@ class BindTest extends TestCase
         $this->assertArrayHasKey(FakeEngine::class . '-' . Name::ANY, $container);
     }
 
-    public function testUntargetedBindSingleton() : void
+    public function testUntargetedBindSingleton()
     {
         $container = new Container;
         $bind = (new Bind($container, FakeEngine::class))->in(Scope::SINGLETON);
@@ -71,12 +71,7 @@ class BindTest extends TestCase
         $this->assertSame(spl_object_hash($dependency1), spl_object_hash($dependency2));
     }
 
-    /**
-     * @return (string|string[])[][]
-     *
-     * @psalm-return array{0: array{0: string}, 1: array{0: array{tmpDir: string, leg: string}}}
-     */
-    public function nameProvider() : array
+    public function nameProvider()
     {
         return [
             ['tmpDir=tmp_dir,leg=left'],
@@ -87,9 +82,9 @@ class BindTest extends TestCase
     /**
      * @dataProvider nameProvider
      *
-     * @param array<string, string>|string $name
+     * @param array|string $name
      */
-    public function testToConstructor($name) : void
+    public function testToConstructor($name)
     {
         $container = new Container;
         $container->add((new Bind($container, ''))->annotatedWith('tmp_dir')->toInstance('/tmp'));
@@ -101,7 +96,7 @@ class BindTest extends TestCase
         $this->assertSame('/tmp', $instance->tmpDir);
     }
 
-    public function testToConstructorWithMethodInjection() : void
+    public function testToConstructorWithMethodInjection()
     {
         $container = new Container;
         $container->add((new Bind($container, ''))->annotatedWith('tmp_dir')->toInstance('/tmp'));
@@ -119,19 +114,19 @@ class BindTest extends TestCase
         $this->assertInstanceOf(FakeEngine::class, $instance->engine);
     }
 
-    public function testToValidation() : void
+    public function testToValidation()
     {
         $this->expectException(InvalidType::class);
         (new Bind(new Container, FakeHandleInterface::class))->to(FakeEngine::class);
     }
 
-    public function testToProvider() : void
+    public function testToProvider()
     {
         $this->expectException(InvalidProvider::class);
         (new Bind(new Container, FakeHandleInterface::class))->toProvider(FakeEngine::class);
     }
 
-    public function testBindProviderAsProvider() : void
+    public function testBindProviderAsProvider()
     {
         $container = new Container;
         (new Bind($container, ProviderInterface::class))->annotatedWith('handle')->to(FakeHandleProvider::class);
@@ -139,7 +134,7 @@ class BindTest extends TestCase
         $this->assertInstanceOf(FakeHandleProvider::class, $instance);
     }
 
-    public function testBindProviderAsProviderInSingleton() : void
+    public function testBindProviderAsProviderInSingleton()
     {
         $container = new Container;
         (new Bind($container, ProviderInterface::class))->annotatedWith('handle')->to(FakeHandleProvider::class)->in(Scope::SINGLETON);
@@ -148,7 +143,7 @@ class BindTest extends TestCase
         $this->assertSame(spl_object_hash($instance1), spl_object_hash($instance2));
     }
 
-    public function testProviderContext() : void
+    public function testProviderContext()
     {
         $container = new Container;
         $bind = (new Bind($container, ProviderInterface::class))->toProvider(FakeContextualProvider::class, 'context_string');

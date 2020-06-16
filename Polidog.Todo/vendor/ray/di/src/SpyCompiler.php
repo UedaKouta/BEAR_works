@@ -6,7 +6,6 @@ namespace Ray\Di;
 
 use Ray\Aop\BindInterface;
 use Ray\Aop\CompilerInterface;
-use stdClass;
 
 final class SpyCompiler implements CompilerInterface
 {
@@ -17,7 +16,7 @@ final class SpyCompiler implements CompilerInterface
     {
         unset($class, $args, $bind);
         // never called
-        return new stdClass;
+        return new \stdClass;
     }
 
     /**

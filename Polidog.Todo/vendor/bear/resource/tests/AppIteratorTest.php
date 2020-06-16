@@ -20,7 +20,7 @@ class AppIteratorTest extends TestCase
         $this->appIterator = new AppIterator($resourceDir);
     }
 
-    public function testForEach() : void
+    public function testForEach()
     {
         foreach ($this->appIterator as $key => $meta) {
             $isValidUri = filter_var($meta->uri, FILTER_VALIDATE_URL);
@@ -29,7 +29,7 @@ class AppIteratorTest extends TestCase
         }
     }
 
-    public function testResourceDirException() : void
+    public function testResourceDirException()
     {
         $this->expectException(ResourceDirException::class);
         new AppIterator('/invalid');

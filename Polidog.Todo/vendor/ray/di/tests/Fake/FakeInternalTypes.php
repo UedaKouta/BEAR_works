@@ -28,7 +28,7 @@ class FakeInternalTypes
         $this->callable = $callable;
     }
 
-    public function stringId(string $id): void
+    public function stringId(string $id)
     {
         unset($id);
     }

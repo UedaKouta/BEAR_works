@@ -53,10 +53,6 @@ final class DependencyCode implements SetContextInterface
      */
     private $qualifier;
 
-    /**
-     * @var string
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
     private $context;
 
     /**
@@ -101,7 +97,7 @@ final class DependencyCode implements SetContextInterface
         $this->context = $context;
     }
 
-    public function setQaulifier(IpQualifier $qualifer) : void
+    public function setQaulifier(IpQualifier $qualifer)
     {
         $this->qualifier = $qualifer;
     }
@@ -134,12 +130,11 @@ final class DependencyCode implements SetContextInterface
         $isSingleton = $prop($dependency, 'isSingleton');
         $node[] = $this->getIsSingletonCode($isSingleton);
         $node[] = new Node\Stmt\Return_(new Node\Expr\Variable('instance'));
-        /** @var Stmt\Namespace_ $namespace */
-        $namespace = $this->factory->namespace('Ray\Di\Compiler')->addStmts($node)->getNode();
+        $node = $this->factory->namespace('Ray\Di\Compiler')->addStmts($node)->getNode();
         $qualifer = $this->qualifier;
         $this->qualifier = null;
 
-        return new Code($namespace, $isSingleton, $qualifer);
+        return new Code($node, $isSingleton, $qualifer);
     }
 
     /**
@@ -176,7 +171,7 @@ final class DependencyCode implements SetContextInterface
      *
      * This code is used by Dependency and DependencyProvider
      *
-     * @return array<Expr>
+     * @return \PhpParser\Node[]
      */
     private function getFactoryNode(DependencyInterface $dependency) : array
     {

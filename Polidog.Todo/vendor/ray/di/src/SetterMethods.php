@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ray\Di;
 
-use Exception;
-
 final class SetterMethods
 {
     /**
@@ -13,16 +11,14 @@ final class SetterMethods
      */
     private $setterMethods;
 
-    /**
-     * @param array<SetterMethod> $setterMethods
-     */
     public function __construct(array $setterMethods)
     {
         $this->setterMethods = $setterMethods;
     }
 
     /**
-     * @throws Exception
+     * @throws Exception\Unbound
+     * @throws \Exception
      */
     public function __invoke(object $instance, Container $container) : void
     {

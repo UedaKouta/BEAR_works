@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class NullModuleTest extends TestCase
 {
-    public function testEmpty() : void
+    public function testEmpty()
     {
         $module = new NullModule;
         $container = $module->getContainer();

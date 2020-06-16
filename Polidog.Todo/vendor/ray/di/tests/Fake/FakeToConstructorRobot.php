@@ -15,7 +15,7 @@ class FakeToConstructorRobot implements FakeRobotInterface
         $this->tmpDir = $tmpDir;
     }
 
-    public function setEngine(FakeEngineInterface $engine): void
+    public function setEngine(FakeEngineInterface $engine)
     {
         $this->engine = $engine;
     }

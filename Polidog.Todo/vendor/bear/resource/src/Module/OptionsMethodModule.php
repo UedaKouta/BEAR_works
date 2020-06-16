@@ -13,7 +13,7 @@ class OptionsMethodModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure() : void
+    protected function configure()
     {
         $this->bind(RenderInterface::class)->annotatedWith('options')->to(OptionsRenderer::class);
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceNotFoundException;
-use Exception;
 use Ray\Di\Exception\Unbound;
 use Ray\Di\InjectorInterface;
 
@@ -27,8 +26,6 @@ final class AppAdapter implements AdapterInterface
      * Resource adapter path
      *
      * @var string
-     *
-     * @psalm-suppress PropertyNotSetInConstructor
      */
     private $path;
 
@@ -57,7 +54,6 @@ final class AppAdapter implements AdapterInterface
         $class = sprintf('%s%s\Resource\%s', $this->namespace, $this->path, str_replace('/', '\\', ucwords($uri->scheme) . $path));
         try {
             $instance = $this->injector->getInstance($class);
-            assert($instance instanceof ResourceObject);
         } catch (Unbound $e) {
             throw $this->getNotFound($uri, $e, $class);
         }
@@ -68,7 +64,7 @@ final class AppAdapter implements AdapterInterface
     /**
      * @return ResourceNotFoundException|Unbound
      */
-    private function getNotFound(AbstractUri $uri, Unbound $e, string $class) : Exception
+    private function getNotFound(AbstractUri $uri, Unbound $e, string $class) : \Exception
     {
         $unboundClass = $e->getMessage();
         if ($unboundClass === "{$class}-") {

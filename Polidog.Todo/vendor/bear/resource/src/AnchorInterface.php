@@ -9,11 +9,9 @@ interface AnchorInterface
     /**
      * Return linked request with hyper reference
      *
-     * @param string               $rel     Relation
-     * @param AbstractRequest      $request Resource request
-     * @param array<string, mixed> $query   Resource parameters
-     *
-     * @return array{0:string, 1:string} [$method, $uri]
+     * @param string          $rel     Realaction
+     * @param AbstractRequest $request Resource request
+     * @param array           $query   Resource parameters
      */
     public function href(string $rel, AbstractRequest $request, array $query);
 }

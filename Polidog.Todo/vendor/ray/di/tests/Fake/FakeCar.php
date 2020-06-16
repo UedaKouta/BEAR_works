@@ -39,77 +39,61 @@ class FakeCar implements FakeCarInterface
     }
 
     /**
-     * @Inject 
-     *
-     * @return void
+     * @Inject
      */
-    public function setTires(FakeTyreInterface $frontTyre, FakeTyreInterface $rearTyre): void
+    public function setTires(FakeTyreInterface $frontTyre, FakeTyreInterface $rearTyre)
     {
         $this->frontTyre = $frontTyre;
         $this->rearTyre = $rearTyre;
     }
 
     /**
-     * @Inject (optional=true)
-     *
-     * @return void
+     * @Inject(optional=true)
      */
-    public function setHardtop(FakeHardtopInterface $hardtop): void
+    public function setHardtop(FakeHardtopInterface $hardtop)
     {
         $this->hardtop = $hardtop;
     }
 
     /**
-     * @Inject 
-     *
+     * @Inject
      * @Named("rightMirror=right,$leftMirror=left")
-     *
-     * @return void
      */
-    public function setMirrors(FakeMirrorInterface $rightMirror, FakeMirrorInterface $leftMirror): void
+    public function setMirrors(FakeMirrorInterface $rightMirror, FakeMirrorInterface $leftMirror)
     {
         $this->rightMirror = $rightMirror;
         $this->leftMirror = $leftMirror;
     }
 
     /**
-     * @Inject 
-     *
+     * @Inject
      * @Named("right")
-     *
-     * @return void
      */
-    public function setSpareMirror(FakeMirrorInterface $rightMirror): void
+    public function setSpareMirror(FakeMirrorInterface $rightMirror)
     {
         $this->spareMirror = $rightMirror;
     }
 
     /**
-     * @Inject 
-     *
-     * @return void
+     * @Inject
      */
-    public function setHandle(FakeHandleInterface $handle): void
+    public function setHandle(FakeHandleInterface $handle)
     {
         $this->handle = $handle;
     }
 
     /**
-     * @FakeGearStickInject ("leather")
-     *
-     * @return void
+     * @FakeGearStickInject("leather")
      */
-    public function setGearStick(FakeGearStickInterface $stick): void
+    public function setGearStick(FakeGearStickInterface $stick)
     {
         $this->gearStick = $stick;
     }
 
     /**
-     * @PostConstruct 
-     *
-     * @return void
+     * @PostConstruct
      */
-    public function postConstruct(): void
+    public function postConstruct()
     {
         $isEngineInstalled = $this->engine instanceof FakeEngine;
         $isTyreInstalled = $this->frontTyre instanceof FakeTyre;

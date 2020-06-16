@@ -23,91 +23,80 @@ class HttpResourceObjectTest extends TestCase
         $this->resource = $injector->getInstance(ResourceInterface::class);
     }
 
-    public function testGet() : HttpResourceObject
+    public function testGet()
     {
         $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $this->assertArrayHasKey('args', $response->body);
-        $this->assertStringContainsString('"args": {', (string) $response->view);
-        assert($response instanceof HttpResourceObject);
-
-        return $response;
+        $this->assertContains('"args": {', $response->view);
     }
 
-    public function testPost() : void
+    public function testPost()
     {
         $response = $this->resource->post('http://httpbin.org/post', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', (string) $response->view);
+        $this->assertContains('"form": {', $response->view);
     }
 
-    public function testPut() : void
+    public function testPut()
     {
         $response = $this->resource->put('http://httpbin.org/put', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', (string) $response->view);
+        $this->assertContains('"form": {', $response->view);
     }
 
-    public function testPatch() : void
+    public function testPatch()
     {
         $response = $this->resource->patch('http://httpbin.org/patch', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', (string) $response->view);
+        $this->assertContains('"form": {', $response->view);
     }
 
-    public function testDelete() : void
+    public function testDelete()
     {
         $response = $this->resource->delete('http://httpbin.org/delete', ['foo' => 'bar']);
         $this->assertSame(200, $response->code);
         $this->assertArrayHasKey('access-control-allow-credentials', $response->headers);
         $body = $response->body;
         $this->assertSame('bar', $body['form']['foo']);
-        $this->assertStringContainsString('"form": {', (string) $response->view);
+        $this->assertContains('"form": {', $response->view);
     }
 
-    /**
-     * @depends testGet
-     */
-    public function testToString(HttpResourceObject $response) : void
+    public function testToString()
     {
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $actual = (string) $response;
-        $this->assertStringContainsString('"args": {', $actual);
+        $this->assertContains('"args": {', $actual);
     }
 
-    /**
-     * @depends testGet
-     */
-    public function testIsSet(HttpResourceObject $response) : void
+    public function testIsSet()
     {
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
         $isSet = isset($response->__invalid);
         $this->assertFalse($isSet);
     }
 
-    /**
-     * @depends testGet
-     */
-    public function testSet(HttpResourceObject $response) : void
+    public function testSet()
     {
         $this->expectException(BadFunctionCallException::class);
-        $response->foo = '1'; // @phpstan-ignore-line
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $response->foo = '1';
     }
 
-    /**
-     * @depends testGet
-     */
-    public function testInvalidGet(HttpResourceObject $response) : void
+    public function testInvalidGet()
     {
         $this->expectException(InvalidArgumentException::class);
-        $response->foo; // @phpstan-ignore-line
+        $response = $this->resource->get('http://httpbin.org/get', ['foo' => 'bar']);
+        $response->foo;
     }
 }

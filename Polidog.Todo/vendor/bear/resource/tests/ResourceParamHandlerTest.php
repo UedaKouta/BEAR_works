@@ -23,25 +23,25 @@ class ResourceParamHandlerTest extends TestCase
         $this->resource = (new Injector($module, __DIR__ . '/tmp'))->getInstance(ResourceInterface::class);
     }
 
-    public function testResourceParam() : void
+    public function testResourceParam()
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->eager->request();
         $this->assertSame('LOGINID', $instance['name']);
     }
 
-    public function testResourceParamInUriTemplate() : void
+    public function testResourceParamInUriTemplate()
     {
         $instance = $this->resource->post->uri('app://self/rparam/greeting')->withQuery(['name' => 'BEAR'])->eager->request();
         $this->assertSame('login:BEAR', $instance['id']);
     }
 
-    public function testException() : void
+    public function testException()
     {
         $this->expectException(ParameterException::class);
         $this->resource->put->uri('app://self/rparam/greeting')->eager->request();
     }
 
-    public function testNullDefault() : void
+    public function testNullDefault()
     {
         $instance = $this->resource->get->uri('app://self/rparam/greeting')->withQuery(['name' => 'IGNORED'])->eager->request();
         $this->assertSame('LOGINID', $instance['name']);

@@ -25,7 +25,7 @@ class JsonRendererTest extends TestCase
         $this->ro->setRenderer(new JsonRenderer);
     }
 
-    public function testRender() : void
+    public function testRender()
     {
         $ro = $this->ro->onGet();
         $data = (string) $ro;
@@ -33,7 +33,7 @@ class JsonRendererTest extends TestCase
         $this->assertSame($expected, $data);
     }
 
-    public function testRenderScalar() : void
+    public function testRenderScalar()
     {
         $this->ro->body = 1;
         $data = (string) $this->ro;
@@ -41,23 +41,23 @@ class JsonRendererTest extends TestCase
         $this->assertSame($expected, $data);
     }
 
-    public function testError() : void
+    public function testError()
     {
         $log = ini_get('error_log');
         $logFile = dirname(__DIR__) . '/log/error.log';
         ini_set('error_log', $logFile);
         $this->ro['inf'] = log(0);
         $data = (string) $this->ro;
-        $this->assertIsString($data);
-        ini_set('error_log', (string) $log);
-        $this->assertStringContainsString('json_encode error', (string) file_get_contents($logFile));
+        $this->assertInternalType('string', $data);
+        ini_set('error_log', $log);
+        $this->assertContains('json_encode error', (string) file_get_contents($logFile));
     }
 
-    public function testHeader() : void
+    public function testHeader()
     {
         /* @var $ro ResourceObject */
         $ro = $this->ro->onGet();
-        (string) $ro; // @phpstan-ignore-line
+        (string) $ro;
         $expected = 'application/json';
         $this->assertSame($expected, $ro->headers['Content-Type']);
     }

@@ -45,7 +45,7 @@ class LinkerTest extends TestCase
         );
     }
 
-    public function testLinkAnnotationSelf() : void
+    public function testLinkAnnotationSelf()
     {
         $request = new Request(
             $this->invoker,
@@ -62,7 +62,7 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationNew() : void
+    public function testAnnotationNew()
     {
         $request = new Request(
             $this->invoker,
@@ -84,7 +84,7 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationCrawl() : void
+    public function testAnnotationCrawl()
     {
         $request = new Request(
             $this->invoker,
@@ -143,7 +143,7 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationCrawl2() : void
+    public function testAnnotationCrawl2()
     {
         $request = new Request(
             $this->invoker,
@@ -246,7 +246,7 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testAnnotationCrawl3() : void
+    public function testAnnotationCrawl3()
     {
         $request = new Request(
             $this->invoker,
@@ -278,7 +278,7 @@ class LinkerTest extends TestCase
         $this->assertSame($expected, $result->body);
     }
 
-    public function testScalarValueLinkThrowException() : void
+    public function testScalarValueLinkThrowException()
     {
         $this->expectException(LinkQueryException::class);
         $request = new Request(
@@ -291,7 +291,7 @@ class LinkerTest extends TestCase
         $this->linker->invoke($request);
     }
 
-    public function testInvalidRel() : void
+    public function testInvalidRel()
     {
         $this->expectException(LinkRelException::class);
         $request = new Request(
@@ -304,7 +304,7 @@ class LinkerTest extends TestCase
         $this->linker->invoke($request);
     }
 
-    public function testNotFoundResourceHasBody() : void
+    public function testNotFoundResourceHasBody()
     {
         $request = new Request(
             $this->invoker,

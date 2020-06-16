@@ -23,34 +23,34 @@ class ObjectTest extends TestCase
         $this->ro[2] = 'entry3';
     }
 
-    public function testOffsetGet() : void
+    public function testOffsetGet()
     {
         $actual = $this->ro[0];
         $this->assertSame('entry1', $actual);
     }
 
-    public function testOffsetExists() : void
+    public function testOffsetExists()
     {
         $this->assertTrue(isset($this->ro[0]));
     }
 
-    public function testOffsetUnset() : void
+    public function testOffsetUnset()
     {
         unset($this->ro[0]);
         $this->assertFalse(isset($this->ro[0]));
     }
 
-    public function testOffsetExistsFalse() : void
+    public function testOffsetExistsFalse()
     {
         $this->assertFalse(isset($this->ro[10]));
     }
 
-    public function testCount() : void
+    public function testCount()
     {
         $this->assertCount(3, $this->ro);
     }
 
-    public function testKsort() : void
+    public function testKsort()
     {
         $this->ro = new Mock\Entry;
         $this->ro['d'] = 'lemon';
@@ -61,7 +61,7 @@ class ObjectTest extends TestCase
         $this->assertSame($expected, (array) $this->ro->body);
     }
 
-    public function testAsort() : void
+    public function testAsort()
     {
         $this->ro = new Mock\Entry;
         $this->ro['d'] = 'lemon';
@@ -72,7 +72,7 @@ class ObjectTest extends TestCase
         $this->assertSame($expected, (array) $this->ro->body);
     }
 
-    public function testAsortDisable() : void
+    public function testAsortDisable()
     {
         $resource = new Mock\Entry;
         $resource->body = 1;
@@ -80,7 +80,7 @@ class ObjectTest extends TestCase
         $this->assertSame(1, $resource->body);
     }
 
-    public function testKsortDisable() : void
+    public function testKsortDisable()
     {
         $resource = new Mock\Entry;
         $resource->body = 1;
@@ -88,13 +88,13 @@ class ObjectTest extends TestCase
         $this->assertSame(1, $resource->body);
     }
 
-    public function testAppend() : void
+    public function testAppend()
     {
         $this->ro[] = 'entry_append';
         $this->assertCount(4, $this->ro->body);
     }
 
-    public function testGetIterator() : void
+    public function testGetIterator()
     {
         $iterator = $this->ro->getIterator();
         $actual = '';
@@ -106,7 +106,7 @@ class ObjectTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testGetEmptyIterator() : void
+    public function testGetEmptyIterator()
     {
         $this->ro->body = 'string';
         $iterator = $this->ro->getIterator();
@@ -119,29 +119,29 @@ class ObjectTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testCode() : void
+    public function testCode()
     {
         $this->assertSame(Code::OK, 200);
         $this->assertSame(Code::BAD_REQUEST, 400);
         $this->assertSame(Code::ERROR, 500);
     }
 
-    public function testToString() : void
+    public function testToString()
     {
         $this->ro->headers['X-TEST'] = __FUNCTION__;
         $str = (string) $this->ro;
-        $this->assertIsString($str);
+        $this->assertInternalType('string', $str);
     }
 
-    public function testToStringScalarBody() : void
+    public function testToStringScalarBody()
     {
         $this->ro->headers['X-TEST'] = __FUNCTION__;
         $this->ro->body = 'OK';
         $str = (string) $this->ro;
-        $this->assertIsString($str);
+        $this->assertInternalType('string', $str);
     }
 
-    public function testToStringWithRenderer() : void
+    public function testToStringWithRenderer()
     {
         $renderer = new FakeTestRenderer;
         $this->ro->setRenderer($renderer);
@@ -149,13 +149,13 @@ class ObjectTest extends TestCase
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
-    public function testSetRendererWithoutRenderer() : void
+    public function testSetRendererWithoutRenderer()
     {
         $result = (string) ($this->ro);
         $this->assertSame('["entry1","entry2","entry3"]', $result);
     }
 
-    public function estResourceHasView() : void
+    public function testResourceHasView()
     {
         $this->ro->view = 'view-is-override';
         $result = (string) ($this->ro);

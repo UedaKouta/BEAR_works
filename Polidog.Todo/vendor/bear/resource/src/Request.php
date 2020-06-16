@@ -4,34 +4,28 @@ declare(strict_types=1);
 
 namespace BEAR\Resource;
 
-use OutOfRangeException;
-
 /**
  * @property $this $lazy
  * @property $this $eager
- *
- * @psalm-suppress PropertyNotSetInConstructor for DSL
  */
 final class Request extends AbstractRequest
 {
-    public const GET = 'get';
+    const GET = 'get';
 
-    public const POST = 'post';
+    const POST = 'post';
 
-    public const PUT = 'put';
+    const PUT = 'put';
 
-    public const PATCH = 'patch';
+    const PATCH = 'patch';
 
-    public const DELETE = 'delete';
+    const DELETE = 'delete';
 
-    public const HEAD = 'head';
+    const HEAD = 'head';
 
-    public const OPTIONS = 'options';
+    const OPTIONS = 'options';
 
     /**
-     * @return array<string, string>|int|mixed|self
-     *
-     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @return $this|array|int|string
      */
     public function __get(string $name)
     {
@@ -44,13 +38,11 @@ final class Request extends AbstractRequest
             return parent::__get($name);
         }
 
-        throw new OutOfRangeException($name);
+        throw new \OutOfRangeException($name);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param array<string, mixed> $query
      */
     public function withQuery(array $query) : RequestInterface
     {

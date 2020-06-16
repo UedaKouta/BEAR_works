@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace BEAR\Resource\Annotation;
 
-use JsonSerializable;
-
 /**
  * @Annotation
  * @Target("METHOD")
  */
-final class Link implements JsonSerializable
+final class Link implements \JsonSerializable
 {
     /**
      * Relation to the target resource of the link
@@ -48,12 +46,7 @@ final class Link implements JsonSerializable
      */
     public $crawl = '';
 
-    /**
-     * @return string[]
-     *
-     * @psalm-return array{rel: string, href: string, method: string, title?: string}
-     */
-    public function jsonSerialize() : array
+    public function jsonSerialize()
     {
         $json = [
             'rel' => $this->rel,

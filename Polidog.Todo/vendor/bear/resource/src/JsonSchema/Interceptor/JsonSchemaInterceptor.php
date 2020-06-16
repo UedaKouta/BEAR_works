@@ -18,9 +18,8 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
+use Ray\Aop\ReflectionMethod;
 use Ray\Di\Di\Named;
-use ReflectionClass;
-use stdClass;
 
 final class JsonSchemaInterceptor implements MethodInterceptor
 {
@@ -35,7 +34,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     private $validateDir;
 
     /**
-     * @var ?string
+     * @var null|string
      */
     private $schemaHost;
 
@@ -60,6 +59,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
      */
     public function invoke(MethodInvocation $invocation)
     {
+        /** @var ReflectionMethod $method */
         $method = $invocation->getMethod();
         /** @var JsonSchema $jsonSchema */
         $jsonSchema = $method->getAnnotation(JsonSchema::class);
@@ -76,17 +76,14 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $ro;
     }
 
-    /**
-     * @param array<string, mixed> $arguments
-     */
-    private function validateRequest(JsonSchema $jsonSchema, array $arguments) : void
+    private function validateRequest(JsonSchema $jsonSchema, array $arguments)
     {
         $schemaFile = $this->validateDir . '/' . $jsonSchema->params;
         $this->validateFileExists($schemaFile);
         $this->validate($arguments, $schemaFile);
     }
 
-    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema) : void
+    private function validateResponse(ResourceObject $ro, JsonSchema $jsonSchema)
     {
         $schemaFile = $this->getSchemaFile($jsonSchema, $ro);
         try {
@@ -99,22 +96,17 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         }
     }
 
-    private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema) : void
+    private function validateRo(ResourceObject $ro, string $schemaFile, JsonSchema $jsonSchema)
     {
-        /** @var array<stdClass>|false|stdClass $json */
         $json = json_decode((string) $ro);
         if (! $json) {
             return;
         }
-        /** @var array<stdClass>|stdClass $target */
         $target = is_object($json) ? $this->getTarget($json, $jsonSchema) : $json;
         $this->validate($target, $schemaFile);
     }
 
-    /**
-     * @return mixed
-     */
-    private function getTarget(object $json, JsonSchema $jsonSchema)
+    private function getTarget($json, JsonSchema $jsonSchema)
     {
         if ($jsonSchema->key === null) {
             return $json;
@@ -126,16 +118,13 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         return $json->{$jsonSchema->key};
     }
 
-    /**
-     * @param array<stdClass>|array<string, mixed>|stdClass $target
-     */
-    private function validate($target, string $schemaFile) : void
+    private function validate($scanObject, $schemaFile)
     {
         $validator = new Validator;
         $schema = (object) ['$ref' => 'file://' . $schemaFile];
-        $scanArray = is_array($target) ? $target : $this->deepArray($target);
+        $scanArray = $this->deepArray($scanObject);
         $validator->validate($scanArray, $schema, Constraint::CHECK_MODE_TYPE_CAST);
-        $isValid = (bool) $validator->isValid();
+        $isValid = $validator->isValid();
         if ($isValid) {
             return;
         }
@@ -143,16 +132,14 @@ final class JsonSchemaInterceptor implements MethodInterceptor
         throw $this->throwJsonSchemaException($validator, $schemaFile);
     }
 
-    /**
-     * @return array<int|string, mixed>
-     */
-    private function deepArray(object $values) : array
+    private function deepArray($values)
     {
+        if (! is_array($values)) {
+            return $values;
+        }
         $result = [];
-        /** @psalm-suppress MixedAssignment */
-        foreach ($values as $key => $value) { // @phpstan-ignore-line
-            /** @psalm-suppress MixedArrayOffset */
-            $result[$key] = is_object($value) ? $this->deepArray($value) : $result[$key] = $value;
+        foreach ($values as $key => $value) {
+            $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
         }
 
         return $result;
@@ -160,7 +147,6 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function throwJsonSchemaException(Validator $validator, string $schemaFile) : JsonSchemaException
     {
-        /** @var array<array<string, string>> $errors */
         $errors = $validator->getErrors();
         $msg = '';
         foreach ($errors as $error) {
@@ -175,7 +161,7 @@ final class JsonSchemaInterceptor implements MethodInterceptor
     {
         if (! $jsonSchema->schema) {
             // for BC only
-            new ReflectionClass($ro);
+            $ref = new \ReflectionClass($ro);
             $roFileName = $this->getParentClassName($ro);
             $bcFile = str_replace('.php', '.json', (string) $roFileName);
             if (file_exists($bcFile)) {
@@ -190,29 +176,25 @@ final class JsonSchemaInterceptor implements MethodInterceptor
 
     private function getParentClassName(ResourceObject $ro) : string
     {
-        $parent = (new ReflectionClass($ro))->getParentClass();
+        $parent = (new \ReflectionClass($ro))->getParentClass();
 
-        return  $parent instanceof ReflectionClass ? (string) $parent->getFileName() : '';
+        return  $parent instanceof \ReflectionClass ? (string) $parent->getFileName() : '';
     }
 
-    private function validateFileExists(string $schemaFile) : void
+    private function validateFileExists(string $schemaFile)
     {
         if (! file_exists($schemaFile) || is_dir($schemaFile)) {
             throw new JsonSchemaNotFoundException($schemaFile);
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function getNamedArguments(MethodInvocation $invocation)
     {
         $parameters = $invocation->getMethod()->getParameters();
         $values = $invocation->getArguments();
         $arguments = [];
         foreach ($parameters as $index => $parameter) {
-            /** @psalm-suppress MixedAssignment */
-            $arguments[(string) $parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
+            $arguments[$parameter->name] = $values[$index] ?? $parameter->getDefaultValue();
         }
 
         return $arguments;
