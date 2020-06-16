@@ -9,6 +9,8 @@ use BEAR\Resource\Exception\OutOfBoundsException;
 use BEAR\Resource\Renderer\FakeErrorRenderer;
 use BEAR\Resource\Renderer\FakeTestRenderer;
 use FakeVendor\Sandbox\Resource\App\User\Entry;
+use LogicException;
+use OutOfRangeException;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
@@ -54,7 +56,7 @@ class RequestTest extends TestCase
         $this->nop = $nop;
     }
 
-    public function testToUriWithMethod()
+    public function testToUriWithMethod() : void
     {
         $request = new Request(
             $this->invoker,
@@ -66,7 +68,7 @@ class RequestTest extends TestCase
         $this->assertSame('get test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
-    public function testToUri()
+    public function testToUri() : void
     {
         $request = new Request(
             $this->invoker,
@@ -78,7 +80,7 @@ class RequestTest extends TestCase
         $this->assertSame('test://self/path/to/resource?a=koriym&b=25', $actual);
     }
 
-    public function testInvoke()
+    public function testInvoke() : void
     {
         $request = new Request(
             $this->invoker,
@@ -89,7 +91,7 @@ class RequestTest extends TestCase
         $this->assertSame(['koriym', 25], $request()->body);
     }
 
-    public function testOffsetSet()
+    public function testOffsetSet() : void
     {
         $this->expectException(OutOfBoundsException::class);
         $request = new Request(
@@ -101,7 +103,7 @@ class RequestTest extends TestCase
         $request['animal'] = 'cause_exception';
     }
 
-    public function testOffsetUnset()
+    public function testOffsetUnset() : void
     {
         $this->expectException(OutOfBoundsException::class);
         $request = new Request(
@@ -113,7 +115,7 @@ class RequestTest extends TestCase
         unset($request['animal']);
     }
 
-    public function testInvokeWithQuery()
+    public function testInvokeWithQuery() : void
     {
         $request = new Request(
             $this->invoker,
@@ -124,9 +126,10 @@ class RequestTest extends TestCase
         $this->assertSame(['koriym', 30], $request(['b' => 30])->body);
     }
 
-    public function testToStringWithRenderableResourceObject()
+    public function testToStringWithRenderableResourceObject() : void
     {
-        $ro = (new FakeResource)->setRenderer(new FakeTestRenderer);
+        $ro = new FakeResource;
+        $ro->setRenderer(new FakeTestRenderer);
         $ro->uri = new Uri('app://self/dummy');
         $request = new Request(
             $this->invoker,
@@ -138,9 +141,10 @@ class RequestTest extends TestCase
         $this->assertSame('{"posts":["koriym",30]}', (string) $request);
     }
 
-    public function testToStringWithErrorRenderer()
+    public function testToStringWithErrorRenderer() : void
     {
-        $ro = (new FakeResource)->setRenderer(new FakeErrorRenderer);
+        $ro = new FakeResource;
+        $ro->setRenderer(new FakeErrorRenderer);
         $ro->uri = new Uri('app://self/dummy');
         $request = new Request(
             $this->invoker,
@@ -153,14 +157,14 @@ class RequestTest extends TestCase
             $no = $errno;
             $str = $errstr;
         });
-        (string) $request;
+        (string) $request; // @phpstan-ignore-line
         $this->assertSame(E_USER_WARNING, $no);
-        $this->assertContains('FakeErrorRenderer->render', $str);
+        $this->assertStringContainsString('FakeErrorRenderer->render', $str);
         $this->assertSame('', (string) $request);
         restore_error_handler();
     }
 
-    public function testToStringWithoutRender()
+    public function testToStringWithoutRender() : void
     {
         $request = new Request(
             $this->invoker,
@@ -172,7 +176,7 @@ class RequestTest extends TestCase
         $this->assertSame('{"posts":["koriym",25]}', $result);
     }
 
-    public function testIterator()
+    public function testIterator() : void
     {
         $request = new Request($this->invoker, $this->entry);
         $result = [];
@@ -187,10 +191,10 @@ class RequestTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess() : void
     {
         $request = new Request($this->invoker, $this->entry);
-        $result = $request[100];
+        $result = $request[100]; // @phpstan-ignore-line
         $expected = [
             'id' => 100,
             'title' => 'Entry1'
@@ -198,41 +202,41 @@ class RequestTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testArrayAccessNotExists()
+    public function testArrayAccessNotExists() : void
     {
         $this->expectException(OutOfBoundsException::class);
         $request = new Request(
             $this->invoker,
             $this->entry
         );
-        $request[0];
+        $request[0]; // @phpstan-ignore-line
     }
 
-    public function testIsSet()
+    public function testIsSet() : void
     {
         $request = new Request($this->invoker, $this->entry);
-        $result = isset($request[100]);
+        $result = isset($request[100]); // @phpstan-ignore-line
         $this->assertTrue($result);
     }
 
-    public function testIsSetNot()
+    public function testIsSetNot() : void
     {
         $request = new Request(
             $this->invoker,
             $this->entry
         );
-        $result = isset($request[0]);
+        $result = isset($request[0]); // @phpstan-ignore-line
         $this->assertFalse($result);
     }
 
-    public function testWithQuery()
+    public function testWithQuery() : void
     {
         $this->request->withQuery(['a' => 'bear']);
         $actual = $this->request->toUriWithMethod();
         $this->assertSame('get test://self/path/to/resource?a=bear', $actual);
     }
 
-    public function testAddQuery()
+    public function testAddQuery() : void
     {
         $this->request->withQuery(['a' => 'original', 'b' => 25]);
         $this->request->addQuery(['a' => 'bear', 'c' => 'kuma']);
@@ -240,18 +244,18 @@ class RequestTest extends TestCase
         $this->assertSame('get test://self/path/to/resource?a=bear&b=25&c=kuma', $actual);
     }
 
-    public function testInvalidMethod()
+    public function testInvalidMethod() : void
     {
         $this->expectException(MethodException::class);
         new Request($this->invoker, $this->entry, 'invalid-method');
     }
 
-    public function testHash()
+    public function testHash() : void
     {
-        $this->assertInternalType('string', $this->request->hash());
+        $this->assertIsString($this->request->hash());
     }
 
-    public function testRequestExceptionString()
+    public function testRequestExceptionString() : void
     {
         $request = new Request(
             $this->invoker,
@@ -264,19 +268,19 @@ class RequestTest extends TestCase
             $no = $errno;
             $str = $errstr;
         });
-        (string) $request;
+        (string) $request; // @phpstan-ignore-line
         $this->assertSame(256, $no);
-        $this->assertContains('BEAR\Resource\FakeNopResource', $str);
+        $this->assertStringContainsString(FakeNopResource::class, $str);
         restore_error_handler();
     }
 
-    public function testSerialize()
+    public function testSerialize() : void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         serialize($this->request);
     }
 
-    public function testCode()
+    public function testCode() : Request
     {
         $request = new Request(
             $this->invoker,
@@ -294,7 +298,7 @@ class RequestTest extends TestCase
     /**
      * @depends testCode
      */
-    public function testHeaders(Request $request)
+    public function testHeaders(Request $request) : void
     {
         $headers = $request->headers;
         $this->assertSame([], $headers);
@@ -303,7 +307,7 @@ class RequestTest extends TestCase
     /**
      * @depends testCode
      */
-    public function testBody(Request $request)
+    public function testBody(Request $request) : void
     {
         $body = $request->body;
         $expected = ['posts' => ['koriym', 25]];
@@ -313,9 +317,9 @@ class RequestTest extends TestCase
     /**
      * @depends testCode
      */
-    public function testInvalidProp(Request $request)
+    public function testInvalidProp(Request $request) : void
     {
-        $this->expectException(\OutOfRangeException::class);
-        $request->__invalid__;
+        $this->expectException(OutOfRangeException::class);
+        $request->__invalid__; // @phpstan-ignore-line
     }
 }

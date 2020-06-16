@@ -98,7 +98,7 @@ class __TwigTemplate_1b3e9e852d9fb5f4b978ec224af5212eab4f95288c2b45a4f86943e53d3
                     // line 29
                     echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 29), "html", null, true);
                     echo "\">del</a> -->
-                                            <a class=\"btn btn-success\" href=\"/done?id=";
+                                            <a class=\"btn btn-success\" href=\"../src/Resource/Page/done?id=";
                     // line 30
                     echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 30), "html", null, true);
                     echo "\">Done</a>
@@ -165,6 +165,6 @@ class __TwigTemplate_1b3e9e852d9fb5f4b978ec224af5212eab4f95288c2b45a4f86943e53d3
 
     public function getSourceContext()
     {
-        return new Source("", "Page/Index.html.twig", "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/var/templates/Page/Index.html.twig");
+        return new Source("", "Page/Index.html.twig", "/Applications/MAMP/htdocs/works/Polidog.Todo/var/templates/Page/Index.html.twig");
     }
 }

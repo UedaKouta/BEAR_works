@@ -143,6 +143,6 @@ class __TwigTemplate_4b5796c13bf9b635d11fcb804a244d553fda958031e3723ab75631cdaaa
 
     public function getSourceContext()
     {
-        return new Source("", "layout/base.html.twig", "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/var/templates/layout/base.html.twig");
+        return new Source("", "layout/base.html.twig", "/Applications/MAMP/htdocs/works/Polidog.Todo/var/templates/layout/base.html.twig");
     }
 }

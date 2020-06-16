@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class NullResponderTest extends TestCase
 {
-    public function test__toString()
+    public function test__toString() : void
     {
-        $this->assertNull((new NullResponder)(new NullResourceObject, []));
+        $this->assertNull((new NullResponder)(new NullResourceObject, [])); // @phpstan-ignore-line
     }
 }

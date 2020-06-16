@@ -27,7 +27,7 @@ class HalRendererTest extends TestCase
         $this->ro->setRenderer(new HalRenderer(new AnnotationReader(), new HalLink(new NullReverseLink)));
     }
 
-    public function testRender()
+    public function testRender() : void
     {
         $ro = $this->ro->onGet();
         $data = (string) $ro;
@@ -58,7 +58,7 @@ EOT;
         $this->assertSame($expected, $data);
     }
 
-    public function testRenderScalar()
+    public function testRenderScalar() : void
     {
         $this->ro->body = 1;
         $data = (string) $this->ro;
@@ -79,16 +79,16 @@ EOT;
         $this->assertSame($expected, $data);
     }
 
-    public function testHeader()
+    public function testHeader() : void
     {
         /* @var $ro ResourceObject */
         $ro = $this->ro->onGet();
-        (string) $ro;
+        (string) $ro; // @phpstan-ignore-line
         $expected = 'application/hal+json';
         $this->assertSame($expected, $ro->headers['Content-Type']);
     }
 
-    public function testBodyLink()
+    public function testBodyLink() : void
     {
         $ro = $this->ro->onGet(true);
         $actual = (string) $ro;
@@ -119,15 +119,15 @@ EOT;
         $this->assertSame($expected, $actual);
     }
 
-    public function testLocationHeader()
+    public function testLocationHeader() : void
     {
         $ro = $this->ro->onGet();
         $ro->headers['Location'] = '/foo';
-        (string) $ro;
+        (string) $ro; // @phpstan-ignore-line
         $this->assertSame('/foo', $ro->headers['Location']);
     }
 
-    public function testNonArrayBody()
+    public function testNonArrayBody() : void
     {
         $ro = $this->ro->onGet();
         $ro->body = '1';

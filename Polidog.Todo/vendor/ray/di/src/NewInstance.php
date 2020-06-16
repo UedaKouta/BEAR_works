@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Ray\Di;
 
 use Ray\Aop\Bind as AopBind;
+use ReflectionClass;
+use ReflectionException;
 
 final class NewInstance
 {
@@ -19,7 +21,7 @@ final class NewInstance
     private $setterMethods;
 
     /**
-     * @var null|Arguments
+     * @var ?Arguments
      */
     private $arguments;
 
@@ -32,7 +34,7 @@ final class NewInstance
      * @phpstan-param \ReflectionClass<object> $class
      */
     public function __construct(
-        \ReflectionClass $class,
+        ReflectionClass $class,
         SetterMethods $setterMethods,
         Name $constructorName = null
     ) {
@@ -46,11 +48,12 @@ final class NewInstance
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function __invoke(Container $container) : object
     {
-        $instance = $this->arguments instanceof Arguments ? (new \ReflectionClass($this->class))->newInstanceArgs($this->arguments->inject($container)) : new $this->class;
+        /** @psalm-suppress MixedMethodCall */
+        $instance = $this->arguments instanceof Arguments ? (new ReflectionClass($this->class))->newInstanceArgs($this->arguments->inject($container)) : new $this->class;
 
         return $this->postNewInstance($container, $instance);
     }
@@ -64,11 +67,13 @@ final class NewInstance
     }
 
     /**
-     * @throws \ReflectionException
+     * @param array<int, mixed> $params
+     *
+     * @throws ReflectionException
      */
     public function newInstanceArgs(Container $container, array $params) : object
     {
-        $instance = (new \ReflectionClass($this->class))->newInstanceArgs($params);
+        $instance = (new ReflectionClass($this->class))->newInstanceArgs($params);
 
         return $this->postNewInstance($container, $instance);
     }
@@ -84,14 +89,13 @@ final class NewInstance
 
     private function postNewInstance(Container $container, object $instance) : object
     {
-        // setter injection
-        ($this->setterMethods)($instance, $container);
-
         // bind dependency injected interceptors
         if ($this->bind instanceof AspectBind) {
             assert(isset($instance->bindings));
             $instance->bindings = $this->bind->inject($container);
         }
+        // setter injection
+        ($this->setterMethods)($instance, $container);
 
         return $instance;
     }

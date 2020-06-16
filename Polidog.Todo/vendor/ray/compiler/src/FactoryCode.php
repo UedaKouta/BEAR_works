@@ -12,6 +12,7 @@ use Ray\Di\Container;
 use Ray\Di\InjectorInterface;
 use Ray\Di\Instance;
 use Ray\Di\Name;
+use Ray\Di\SetterMethod;
 
 final class FactoryCode
 {
@@ -29,11 +30,6 @@ final class FactoryCode
      * @var null|InjectorInterface
      */
     private $injector;
-
-    /**
-     * @var DependencyCode
-     */
-    private $compiler;
 
     /**
      * @var NodeFactory
@@ -59,7 +55,10 @@ final class FactoryCode
     }
 
     /**
-     * @return Node[]
+     * @param array<Argument>     $arguments
+     * @param array<SetterMethod> $setterMethods
+     *
+     * @return array<Expr>
      */
     public function getFactoryCode(string $class, array $arguments, array $setterMethods, string $postConstruct) : array
     {
@@ -102,15 +101,17 @@ final class FactoryCode
         return ($this->functionCompiler)($argument, $dependency);
     }
 
+    /**
+     * @param array<Argument> $arguments
+     */
     private function getConstructorInjection(string $class, array $arguments = []) : Expr\New_
     {
-        /* @var $arguments Argument[] */
         $args = [];
         foreach ($arguments as $argument) {
             //            $argument = $argument->isDefaultAvailable() ? $argument->getDefaultValue() : $argument;
             $args[] = $this->getArgStmt($argument);
         }
-
+        /** @var array<Node\Arg> $args */
         return new Expr\New_(new Node\Name\FullyQualified($class), $args);
     }
 

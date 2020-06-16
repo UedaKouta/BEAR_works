@@ -4,40 +4,42 @@ declare(strict_types=1);
 
 namespace Ray\Di;
 
+use LogicException;
+use PDO;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Exception\InvalidToConstructorNameParameter;
 use Ray\Di\Exception\Unbound;
 
 class InjectorTest extends TestCase
 {
-    public function testNew()
+    public function testNew() : void
     {
         $injector = new Injector(new FakeInstanceBindModule);
         $this->assertInstanceOf(Injector::class, $injector);
     }
 
-    public function testGetToInstance()
+    public function testGetToInstance() : void
     {
         $injector = new Injector(new FakeInstanceBindModule);
         $instance = $injector->getInstance('', 'one');
         $this->assertSame(1, $instance);
     }
 
-    public function testToInstance()
+    public function testToInstance() : void
     {
         $engine = new FakeEngine;
         $injector = new Injector(new FakeClassInstanceBindModule($engine));
         $this->assertSame($engine, $injector->getInstance(FakeEngine::class));
     }
 
-    public function testUnbound()
+    public function testUnbound() : void
     {
         $this->expectException(Unbound::class);
         $injector = new Injector(new FakeInstanceBindModule);
         $injector->getInstance('', 'invalid-binding-xxx');
     }
 
-    public function testInstall()
+    public function testInstall() : void
     {
         $injector = new Injector(new FakeInstallModule());
         $instance = $injector->getInstance('', 'one');
@@ -46,21 +48,21 @@ class InjectorTest extends TestCase
         $this->assertSame(2, $instance);
     }
 
-    public function testFormerBindingHasPriority()
+    public function testFormerBindingHasPriority() : void
     {
         $injector = new Injector(new FakeFormerBindingHasPriorityModule);
         $instance = $injector->getInstance('', 'one');
         $this->assertSame(1, $instance);
     }
 
-    public function testLatterBindingHasPriorityWithThisParameter()
+    public function testLatterBindingHasPriorityWithThisParameter() : void
     {
         $injector = new Injector(new FakeOverrideInstallModule);
         $instance = $injector->getInstance('', 'one');
         $this->assertSame(3, $instance);
     }
 
-    public function testModuleInModule()
+    public function testModuleInModule() : void
     {
         $injector = new Injector(new FakeModuleInModule);
         $instance = $injector->getInstance('', 'one');
@@ -69,28 +71,28 @@ class InjectorTest extends TestCase
         $this->assertSame(2, $instance);
     }
 
-    public function testModuleInModuleOverride()
+    public function testModuleInModuleOverride() : void
     {
         $injector = new Injector(new FakeModuleInModuleOverride);
         $instance = $injector->getInstance('', 'one');
         $this->assertSame(3, $instance);
     }
 
-    public function testToBinding()
+    public function testToBinding() : void
     {
         $injector = new Injector(new FakeToBindModule);
         $instance = $injector->getInstance(FakeRobotInterface::class);
         $this->assertInstanceOf(FakeRobot::class, $instance);
     }
 
-    public function testClassToClassBinding()
+    public function testClassToClassBinding() : void
     {
         $injector = new Injector(new FakeCarEngineModule);
         $instance = $injector->getInstance(FakeEngine::class);
         $this->assertInstanceOf(FakeCarEngine::class, $instance);
     }
 
-    public function testToBindingPrototype()
+    public function testToBindingPrototype() : void
     {
         $injector = new Injector(new FakeToBindModule);
         $instance1 = $injector->getInstance(FakeRobotInterface::class);
@@ -98,7 +100,7 @@ class InjectorTest extends TestCase
         $this->assertNotSame(spl_object_hash($instance1), spl_object_hash($instance2));
     }
 
-    public function testToBindingSingleton()
+    public function testToBindingSingleton() : void
     {
         $injector = new Injector(new FakeToBindSingletonModule);
         $instance1 = $injector->getInstance(FakeRobotInterface::class);
@@ -106,7 +108,7 @@ class InjectorTest extends TestCase
         $this->assertSame(spl_object_hash($instance1), spl_object_hash($instance2));
     }
 
-    public function testToProviderBinding()
+    public function testToProviderBinding() : void
     {
         $injector = new Injector(new FakeToProviderBindModule);
         $instance1 = $injector->getInstance(FakeRobotInterface::class);
@@ -114,14 +116,14 @@ class InjectorTest extends TestCase
         $this->assertNotSame(spl_object_hash($instance1), spl_object_hash($instance2));
     }
 
-    public function testClassToProviderBinding()
+    public function testClassToProviderBinding() : void
     {
         $injector = new Injector(new FakeEngineToProviderModule);
         $instance = $injector->getInstance(FakeEngine::class);
         $this->assertInstanceOf(FakeEngine::class, $instance);
     }
 
-    public function testToProviderBindingSingleton()
+    public function testToProviderBindingSingleton() : void
     {
         $injector = new Injector(new FakeToProviderSingletonBindModule);
         $instance1 = $injector->getInstance(FakeRobotInterface::class);
@@ -129,14 +131,14 @@ class InjectorTest extends TestCase
         $this->assertSame(spl_object_hash($instance1), spl_object_hash($instance2));
     }
 
-    public function testGetConcreteClass()
+    public function testGetConcreteClass() : void
     {
         $injector = new Injector;
         $robot = $injector->getInstance(FakeRobot::class);
         $this->assertInstanceOf(FakeRobot::class, $robot);
     }
 
-    public function testGetConcreteHavingDependency()
+    public function testGetConcreteHavingDependency() : void
     {
         $injector = new Injector;
         $team = $injector->getInstance(FakeRobotTeam::class);
@@ -146,14 +148,14 @@ class InjectorTest extends TestCase
         $this->assertInstanceOf(FakeRobot::class, $team->robot2);
     }
 
-    public function testGetConcreteClassWithModule()
+    public function testGetConcreteClassWithModule() : void
     {
         $injector = new Injector(new FakeCarModule);
         $car = $injector->getInstance(FakeCar::class);
         $this->assertInstanceOf(FakeCar::class, $car);
     }
 
-    public function testAnnotationBasedInjection()
+    public function testAnnotationBasedInjection() : Injector
     {
         $injector = new Injector(new FakeCarModule);
         $car = $injector->getInstance(FakeCarInterface::class);
@@ -174,14 +176,14 @@ class InjectorTest extends TestCase
     /**
      * @depends testAnnotationBasedInjection
      */
-    public function testSerialize(Injector $injector)
+    public function testSerialize(Injector $injector) : void
     {
         $extractedInjector = unserialize(serialize($injector));
         $car = $extractedInjector->getInstance(FakeCarInterface::class);
         $this->assertInstanceOf(FakeCar::class, $car);
     }
 
-    public function testAop()
+    public function testAop() : void
     {
         $injector = new Injector(new FakeAopModule, $_ENV['TMP_DIR']);
         $instance = $injector->getInstance(FakeAopInterface::class);
@@ -190,20 +192,20 @@ class InjectorTest extends TestCase
         $this->assertSame(4, $result);
     }
 
-    public function testBuiltinBinding()
+    public function testBuiltinBinding() : void
     {
         $instance = (new Injector)->getInstance(FakeBuiltin::class);
         /* @var $instance FakeBuiltin */
         $this->assertInstanceOf(Injector::class, $instance->injector);
     }
 
-    public function testSerializeBuiltinBinding()
+    public function testSerializeBuiltinBinding() : void
     {
         $instance = unserialize(serialize(new Injector))->getInstance(FakeBuiltin::class);
         $this->assertInstanceOf(Injector::class, $instance->injector);
     }
 
-    public function testAopBoundInDifferentModule()
+    public function testAopBoundInDifferentModule() : void
     {
         $injector = new Injector(new FakeAopInstallModule, $_ENV['TMP_DIR']);
         $instance = $injector->getInstance(FakeAopInterface::class);
@@ -212,7 +214,7 @@ class InjectorTest extends TestCase
         $this->assertSame(4, $result);
     }
 
-    public function testAopBoundInDifferentModuleAfterAnotherBinding()
+    public function testAopBoundInDifferentModuleAfterAnotherBinding() : void
     {
         $injector = new Injector(new FakeAopInstallModule(new FakeAopModule), $_ENV['TMP_DIR']);
         $instance = $injector->getInstance(FakeAopInterface::class);
@@ -221,7 +223,7 @@ class InjectorTest extends TestCase
         $this->assertSame(8, $result);
     }
 
-    public function testAopBoundDoublyInDifferentModule()
+    public function testAopBoundDoublyInDifferentModule() : void
     {
         $injector = new Injector(new FakeAopDoublyInstallModule, $_ENV['TMP_DIR']);
         $instance = $injector->getInstance(FakeAopInterface::class);
@@ -230,17 +232,17 @@ class InjectorTest extends TestCase
         $this->assertSame(8, $result);
     }
 
-    public function testAopClassAutoloader()
+    public function testAopClassAutoloader() : void
     {
         passthru('php ' . __DIR__ . '/script/aop.php');
         $cacheFile = __DIR__ . '/script/aop.php.cache.txt';
         $cache = file_get_contents($cacheFile);
         if (! is_string($cache)) {
-            throw new \LogicException;
+            throw new LogicException;
         }
         $injector = unserialize($cache);
         if (! $injector instanceof Injector) {
-            throw new \LogicException;
+            throw new LogicException;
         }
         $instance = $injector->getInstance(FakeAopInterface::class);
         /* @var $instance FakeAop */
@@ -249,7 +251,7 @@ class InjectorTest extends TestCase
         unlink($cacheFile);
     }
 
-    public function testAopOnDemandByUnboundConcreteClass()
+    public function testAopOnDemandByUnboundConcreteClass() : void
     {
         $injector = new Injector(new FakeAopInterceptorModule, $_ENV['TMP_DIR']);
         $instance = $injector->getInstance(FakeAop::class);
@@ -258,7 +260,7 @@ class InjectorTest extends TestCase
         $this->assertSame(4, $result);
     }
 
-    public function testBindOrder()
+    public function testBindOrder() : void
     {
         $injector = new Injector(new FakeAnnoModule, $_ENV['TMP_DIR']);
         /* @var $instance FakeAnnoOrderClass */
@@ -268,14 +270,14 @@ class InjectorTest extends TestCase
         $this->assertSame($expect, FakeAnnoClass::$order);
     }
 
-    public function testAnnotateConstant()
+    public function testAnnotateConstant() : void
     {
         /* @var $instance FakeConstantConsumer */
         $instance = (new Injector(new FakeConstantModule, $_ENV['TMP_DIR']))->getInstance(FakeConstantConsumer::class);
         $this->assertSame('default_construct', $instance->defaultByConstruct);
     }
 
-    public function testContextualDependencyInjection()
+    public function testContextualDependencyInjection() : void
     {
         $injector = new Injector(new FakeWalkRobotModule);
         /* @var $robot FakeWalkRobot */
@@ -284,21 +286,21 @@ class InjectorTest extends TestCase
         $this->assertInstanceOf(FakeRightLeg::class, $robot->rightLeg);
     }
 
-    public function testNewAbstract()
+    public function testNewAbstract() : void
     {
         $this->expectException(Unbound::class);
         (new Injector)->getInstance(FakeConcreteClass::class);
     }
 
-    public function testIsOptionalValue()
+    public function testIsOptionalValue() : void
     {
         if (! defined('HHVM_VERSION')) {
-            $pdo = (new Injector(new FakePdoModule))->getInstance(\PDO::class);
-            $this->assertInstanceOf(\PDO::class, $pdo);
+            $pdo = (new Injector(new FakePdoModule))->getInstance(PDO::class);
+            $this->assertInstanceOf(PDO::class, $pdo);
         }
     }
 
-    public function testInternalTypes()
+    public function testInternalTypes() : void
     {
         $injector = new Injector(new FakeInternalTypeModule);
         /* @var FakeInternalTypes $types */
@@ -310,13 +312,13 @@ class InjectorTest extends TestCase
         $this->assertIsInt($types->int);
     }
 
-    public function testToConstructor()
+    public function testToConstructor() : void
     {
         $module = new class extends AbstractModule {
             protected function configure()
             {
-                $this->bind(\PDO::class)->toConstructor(
-                    \PDO::class,
+                $this->bind(PDO::class)->toConstructor(
+                    PDO::class,
                     [
                         'dsn' => 'pdo_dsn',
                     ]
@@ -325,18 +327,18 @@ class InjectorTest extends TestCase
             }
         };
         $injector = new Injector($module);
-        $pdo = $injector->getInstance(\PDO::class);
-        $this->assertInstanceOf(\PDO::class, $pdo);
+        $pdo = $injector->getInstance(PDO::class);
+        $this->assertInstanceOf(PDO::class, $pdo);
     }
 
-    public function testToConstructorInvalidName()
+    public function testToConstructorInvalidName() : void
     {
         $this->expectException(InvalidToConstructorNameParameter::class);
         $module = new class extends AbstractModule {
             protected function configure()
             {
-                $this->bind(\PDO::class)->toConstructor(
-                    \PDO::class,
+                $this->bind(PDO::class)->toConstructor( // @phpstan-ignore-line
+                    PDO::class,
                     [
                         ['dsn' => 'pdo_dsn'], // wrong, cause InvalidToConstructorNameParameter exception
                     ]
@@ -345,7 +347,7 @@ class InjectorTest extends TestCase
             }
         };
         $injector = new Injector($module);
-        $pdo = $injector->getInstance(\PDO::class);
-        $this->assertInstanceOf(\PDO::class, $pdo);
+        $pdo = $injector->getInstance(PDO::class);
+        $this->assertInstanceOf(PDO::class, $pdo);
     }
 }

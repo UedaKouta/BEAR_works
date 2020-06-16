@@ -12,7 +12,7 @@ final class AssistedWebContextParam implements ParamInterface
     /**
      * $GLOBALS for testing
      *
-     * @var array
+     * @var array<string, array<string, array|string>>
      */
     private static $globals = [];
 
@@ -38,9 +38,11 @@ final class AssistedWebContextParam implements ParamInterface
     public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
         $superGlobals = static::$globals ? static::$globals : $GLOBALS;
+        /** @var array<string, array<string, string>> $superGlobals */
         $webContextParam = $this->webContextParam;
+        assert(is_string($webContextParam::GLOBAL_KEY));
+        /** @psalm-suppress MixedArrayOffset */
         $phpWebContext = $superGlobals[$webContextParam::GLOBAL_KEY];
-
         if (isset($phpWebContext[$this->webContextParam->key])) {
             return  $phpWebContext[$this->webContextParam->key];
         }
@@ -48,7 +50,10 @@ final class AssistedWebContextParam implements ParamInterface
         return ($this->defaultParam)($varName, $query, $injector);
     }
 
-    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals)
+    /**
+     * @param array<string, array<string, array|string>> $globals
+     */
+    public static function setSuperGlobalsOnlyForTestingPurpose(array $globals) : void
     {
         self::$globals = $globals;
     }
