@@ -1,0 +1,58 @@
+Thu, 04 Jun 2020 09:17:41 +0000
+get page://self/
+
+Twig\Error\LoaderError(Unable to find template "base.html.twig" (looked into: /Applications/MAMP/htdocs/Polidog.Todo/src/Resource, /Applications/MAMP/htdocs/Polidog.Todo/var/templates) in "Page/Index.html.twig" at line 1.)
+ in file /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 250
+
+#0 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Loader/FilesystemLoader.php(150): Twig\Loader\FilesystemLoader->findTemplate('base.html.twig')
+#1 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Environment.php(299): Twig\Loader\FilesystemLoader->getCacheKey('base.html.twig')
+#2 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Environment.php(381): Twig\Environment->getTemplateClass('base.html.twig')
+#3 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Template.php(335): Twig\Environment->loadTemplate('base.html.twig', NULL)
+#4 /Applications/MAMP/htdocs/Polidog.Todo/var/tmp/html-app/twig/1f/1f1dc229a73e23176fdace1b71835d8844984eb3fbad571a2eafd76859d8e869.php(41): Twig\Template->loadTemplate('base.html.twig', 'Page/Index.html...', 1)
+#5 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Template.php(407): __TwigTemplate_1b3e9e852d9fb5f4b978ec224af5212eab4f95288c2b45a4f86943e53d3ed706->doDisplay(Array, Array)
+#6 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Template.php(380): Twig\Template->displayWithErrorHandling(Array, Array)
+#7 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/Template.php(392): Twig\Template->display(Array)
+#8 /Applications/MAMP/htdocs/Polidog.Todo/vendor/twig/twig/src/TemplateWrapper.php(45): Twig\Template->render(Array, Array)
+#9 /Applications/MAMP/htdocs/Polidog.Todo/vendor/madapaja/twig-module/src/TwigRenderer.php(86): Twig\TemplateWrapper->render(Array)
+#10 /Applications/MAMP/htdocs/Polidog.Todo/vendor/madapaja/twig-module/src/TwigRenderer.php(70): Madapaja\TwigModule\TwigRenderer->renderView(Object(Polidog\Todo\Resource\Page\Index_1399552337))
+#11 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/ResourceObject.php(203): Madapaja\TwigModule\TwigRenderer->render(Object(Polidog\Todo\Resource\Page\Index_1399552337))
+#12 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/sunday/src/Provide/Transfer/HttpResponder.php(50): BEAR\Resource\ResourceObject->toString()
+#13 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/sunday/src/Provide/Transfer/HttpResponder.php(34): BEAR\Sunday\Provide\Transfer\HttpResponder->getOutput(Object(Polidog\Todo\Resource\Page\Index_1399552337), Array)
+#14 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/ResourceObject.php(222): BEAR\Sunday\Provide\Transfer\HttpResponder->__invoke(Object(Polidog\Todo\Resource\Page\Index_1399552337), Array)
+#15 /Applications/MAMP/htdocs/Polidog.Todo/bootstrap.php(16): BEAR\Resource\ResourceObject->transfer(Object(BEAR\Sunday\Provide\Transfer\HttpResponder), Array)
+#16 /Applications/MAMP/htdocs/Polidog.Todo/public/index.php(4): {closure}('html-app')
+#17 {main}
+
+PHP Variables
+
+$_SERVER => Array
+(
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs/Polidog.Todo
+    [REMOTE_ADDR] => 127.0.0.1
+    [REMOTE_PORT] => 64612
+    [SERVER_SOFTWARE] => PHP 7.4.6 Development Server
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [SERVER_NAME] => 127.0.0.1
+    [SERVER_PORT] => 8080
+    [REQUEST_URI] => /
+    [REQUEST_METHOD] => GET
+    [SCRIPT_NAME] => /
+    [SCRIPT_FILENAME] => public/index.php
+    [PHP_SELF] => /
+    [HTTP_HOST] => 127.0.0.1:8080
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+    [HTTP_SEC_FETCH_SITE] => none
+    [HTTP_SEC_FETCH_MODE] => navigate
+    [HTTP_SEC_FETCH_USER] => ?1
+    [HTTP_SEC_FETCH_DEST] => document
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, br
+    [HTTP_ACCEPT_LANGUAGE] => ja,en-US;q=0.9,en;q=0.8
+    [REQUEST_TIME_FLOAT] => 1591262260.5862
+    [REQUEST_TIME] => 1591262260
+)
+
+

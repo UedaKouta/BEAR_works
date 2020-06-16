@@ -1,0 +1,45 @@
+Fri, 05 Jun 2020 04:51:13 +0000
+get page://self/favicon.ico
+
+BEAR\Resource\Exception\ResourceNotFoundException(page://self/favicon.ico)
+ in file /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/AppAdapter.php on line 71
+
+#0 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/AppAdapter.php(58): BEAR\Resource\AppAdapter->getNotFound(Object(BEAR\Resource\Uri), Object(Ray\Compiler\Exception\Unbound), 'Polidog\\Todo\\Re...')
+#1 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/Factory.php(50): BEAR\Resource\AppAdapter->get(Object(BEAR\Resource\Uri))
+#2 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/Resource.php(107): BEAR\Resource\Factory->newInstance(Object(BEAR\Resource\Uri))
+#3 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/Resource.php(127): BEAR\Resource\Resource->newInstance(Object(BEAR\Resource\Uri))
+#4 /Applications/MAMP/htdocs/Polidog.Todo/bootstrap.php(14): BEAR\Resource\Resource->uri('page://self/fav...')
+#5 /Applications/MAMP/htdocs/Polidog.Todo/public/index.php(4): {closure}('html-app')
+#6 {main}
+
+PHP Variables
+
+$_SERVER => Array
+(
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs/Polidog.Todo
+    [REMOTE_ADDR] => ::1
+    [REMOTE_PORT] => 50597
+    [SERVER_SOFTWARE] => PHP 7.4.6 Development Server
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [SERVER_NAME] => localhost
+    [SERVER_PORT] => 8080
+    [REQUEST_URI] => /favicon.ico
+    [REQUEST_METHOD] => GET
+    [SCRIPT_NAME] => /favicon.ico
+    [SCRIPT_FILENAME] => public/index.php
+    [PHP_SELF] => /favicon.ico
+    [HTTP_HOST] => localhost:8080
+    [HTTP_CONNECTION] => keep-alive
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36
+    [HTTP_ACCEPT] => image/webp,image/apng,image/*,*/*;q=0.8
+    [HTTP_SEC_FETCH_SITE] => same-origin
+    [HTTP_SEC_FETCH_MODE] => no-cors
+    [HTTP_SEC_FETCH_DEST] => image
+    [HTTP_REFERER] => http://localhost:8080/
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, br
+    [HTTP_ACCEPT_LANGUAGE] => ja,en-US;q=0.9,en;q=0.8
+    [REQUEST_TIME_FLOAT] => 1591332615.7664
+    [REQUEST_TIME] => 1591332615
+)
+
+
