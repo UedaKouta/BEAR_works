@@ -7,7 +7,10 @@ namespace Ray\Di;
 use Ray\Aop\Bind as AopBind;
 use Ray\Aop\CompilerInterface;
 use Ray\Aop\MethodInterceptor;
+use Ray\Aop\Pointcut;
 use Ray\Aop\WeavedInterface;
+use ReflectionClass;
+use ReflectionMethod;
 
 final class Dependency implements DependencyInterface
 {
@@ -17,7 +20,7 @@ final class Dependency implements DependencyInterface
     private $newInstance;
 
     /**
-     * @var null|string
+     * @var ?string
      */
     private $postConstruct;
 
@@ -37,9 +40,9 @@ final class Dependency implements DependencyInterface
     private $index = '';
 
     /**
-     * @param \ReflectionMethod $postConstruct
+     * @param ReflectionMethod $postConstruct
      */
-    public function __construct(NewInstance $newInstance, \ReflectionMethod $postConstruct = null)
+    public function __construct(NewInstance $newInstance, ReflectionMethod $postConstruct = null)
     {
         $this->newInstance = $newInstance;
         $this->postConstruct = $postConstruct ? $postConstruct->name : null;
@@ -82,6 +85,7 @@ final class Dependency implements DependencyInterface
 
         // @PostConstruct
         if ($this->postConstruct) {
+            assert(method_exists($this->instance, $this->postConstruct));
             $this->instance->{$this->postConstruct}();
         }
 
@@ -89,7 +93,7 @@ final class Dependency implements DependencyInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array<int, mixed> $params
      *
      * @return mixed
      */
@@ -105,6 +109,7 @@ final class Dependency implements DependencyInterface
 
         // @PostConstruct
         if ($this->postConstruct) {
+            assert(method_exists($this->instance, $this->postConstruct));
             $this->instance->{$this->postConstruct}();
         }
 
@@ -121,26 +126,28 @@ final class Dependency implements DependencyInterface
         }
     }
 
+    /**
+     * @param array<int,Pointcut> $pointcuts
+     */
     public function weaveAspects(CompilerInterface $compiler, array $pointcuts) : void
     {
         $class = (string) $this->newInstance;
         /**  @psalm-suppress RedundantConditionGivenDocblockType */
         assert(class_exists($class));
-        $isInterceptor = (new \ReflectionClass($class))->implementsInterface(MethodInterceptor::class);
-        $isWeaved = (new \ReflectionClass($class))->implementsInterface(WeavedInterface::class);
+        $isInterceptor = (new ReflectionClass($class))->implementsInterface(MethodInterceptor::class);
+        $isWeaved = (new ReflectionClass($class))->implementsInterface(WeavedInterface::class);
         if ($isInterceptor || $isWeaved) {
             return;
         }
         $bind = new AopBind;
         $className = (string) $this->newInstance;
-        /**  @psalm-suppress RedundantConditionGivenDocblockType */
-        assert(class_exists($className) || interface_exists($className));
+        assert(class_exists($className) || interface_exists((string) $className));
         $bind->bind($className, $pointcuts);
         if (! $bind->getBindings()) {
             return;
         }
         $class = $compiler->compile($className, $bind);
-        /** @var class-string $class */
-        $this->newInstance->weaveAspects($class, $bind);
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $this->newInstance->weaveAspects($class, $bind); // @phpstan-ignore-line
     }
 }

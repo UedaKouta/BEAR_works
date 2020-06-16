@@ -6,13 +6,17 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\JsonSchemaException;
 use JSONSchemaFaker\Faker;
+use SplFileInfo;
 
 class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterface
 {
-    const X_FAKE_JSON = 'X-Fake-JSON';
+    public const X_FAKE_JSON = 'X-Fake-JSON';
 
-    const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
+    public const X_JSON_SCHEMA_EXCEPTION = 'X-JSON-Schema-Exception';
 
+    /**
+     * {@inheritdoc}
+     */
     public function handle(ResourceObject $ro, JsonSchemaException $e, string $schemaFile)
     {
         $ro->headers[self::X_FAKE_JSON] = $schemaFile;
@@ -21,16 +25,26 @@ class JsonSchemaExceptionFakeHandler implements JsonSchemaExceptionHandlerInterf
         $ro->view = null;
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     private function fakeResponse(string $schemaFile) : array
     {
-        $fakeObject = (new Faker)->generate(new \SplFileInfo($schemaFile));
+        /** @var array<int|string, mixed> $fakeObject */
+        $fakeObject = (new Faker)->generate(new SplFileInfo($schemaFile));
 
         return $this->deepArray($fakeObject);
     }
 
+    /**
+     * @param array<int|string, mixed> $values
+     *
+     * @return array<int|string, mixed>
+     */
     private function deepArray($values) : array
     {
         $result = [];
+        /** @psalm-suppress MixedAssignment */
         foreach ($values as $key => $value) {
             $result[$key] = is_object($value) ? $this->deepArray((array) $value) : $result[$key] = $value;
         }

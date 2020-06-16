@@ -8,6 +8,7 @@ use BEAR\Resource\Annotation\Link as LinkAnnotation;
 use BEAR\Resource\Exception\LinkException;
 use Doctrine\Common\Annotations\Reader;
 use function get_class;
+use ReflectionMethod;
 
 final class Anchor implements AnchorInterface
 {
@@ -26,26 +27,36 @@ final class Anchor implements AnchorInterface
      *
      * @throws LinkException
      */
-    public function href(string $rel, AbstractRequest $request, array $query)
+    public function href(string $rel, AbstractRequest $request, array $query) : array
     {
         $classMethod = 'on' . ucfirst($request->method);
-        $annotations = $this->reader->getMethodAnnotations(new \ReflectionMethod(get_class($request->resourceObject), $classMethod));
+        /** @var list<object> $annotations */
+        $annotations = $this->reader->getMethodAnnotations(new ReflectionMethod(get_class($request->resourceObject), $classMethod));
         foreach ($annotations as $annotation) {
             if ($this->isValidLinkAnnotation($annotation, $rel)) {
-                return $this->getMethodUdi($request, $query, $annotation);
+                assert($annotation instanceof LinkAnnotation);
+
+                return $this->getMethodUri($request, $query, $annotation);
             }
         }
 
         throw new LinkException("rel:{$rel} class:" . get_class($request->resourceObject), 500);
     }
 
-    private function isValidLinkAnnotation($annotation, string $rel) : bool
+    private function isValidLinkAnnotation(object $annotation, string $rel) : bool
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         return $annotation instanceof LinkAnnotation && $annotation->rel !== null && $annotation->rel === $rel;
     }
 
-    private function getMethodUdi(AbstractRequest $request, array $query, LinkAnnotation $annotation) : array
+    /**
+     * @param array<string, mixed> $query
+     *
+     * @return array{0:string, 1:string}
+     */
+    private function getMethodUri(AbstractRequest $request, array $query, LinkAnnotation $annotation) : array
     {
+        /** @var array|mixed $body */
         $body = $request->resourceObject->body;
         $query = is_array($body) ? array_merge($body, $query) : [];
         $uri = uri_template($annotation->href, $query);

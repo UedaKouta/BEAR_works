@@ -11,25 +11,31 @@ final class DependencySaver
      */
     private $scriptDir;
 
+    /**
+     * @var FilePutContents
+     */
+    private $filePutContents;
+
     public function __construct(string $scriptDir)
     {
         $this->scriptDir = $scriptDir;
+        $this->filePutContents = new FilePutContents;
     }
 
-    public function __invoke($dependencyIndex, Code $code)
+    public function __invoke(string $dependencyIndex, Code $code) : void
     {
         $pearStyleName = \str_replace('\\', '_', $dependencyIndex);
         $instanceScript = \sprintf(ScriptInjector::INSTANCE, $this->scriptDir, $pearStyleName);
-        \file_put_contents($instanceScript, (string) $code . PHP_EOL, LOCK_EX);
+        ($this->filePutContents)($instanceScript, (string) $code . PHP_EOL);
         if ($code->qualifiers) {
             $this->saveQualifier($code->qualifiers);
         }
     }
 
-    private function saveQualifier(IpQualifier $qualifer)
+    private function saveQualifier(IpQualifier $qualifer) : void
     {
         $qualifier = $this->scriptDir . '/qualifer';
-        ! \file_exists($qualifier) && \mkdir($qualifier);
+        ! \file_exists($qualifier) && ! @mkdir($qualifier) && ! is_dir($qualifier);
         $class = $qualifer->param->getDeclaringClass();
         if (! $class instanceof \ReflectionClass) {
             throw new \LogicException; // @codeCoverageIgnore
@@ -41,6 +47,6 @@ final class DependencySaver
             $qualifer->param->getDeclaringFunction()->name,
             $qualifer->param->name
         );
-        \file_put_contents($fileName, \serialize($qualifer->qualifier) . PHP_EOL);
+        ($this->filePutContents)($fileName, \serialize($qualifer->qualifier) . PHP_EOL);
     }
 }

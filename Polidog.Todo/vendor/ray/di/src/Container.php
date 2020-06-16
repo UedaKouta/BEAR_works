@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Ray\Di;
 
+use BadMethodCallException;
 use Ray\Aop\Compiler;
 use Ray\Aop\CompilerInterface;
 use Ray\Aop\Pointcut;
 use Ray\Di\Exception\Unbound;
 use Ray\Di\Exception\Untargeted;
+use ReflectionClass;
 
 final class Container
 {
@@ -18,7 +20,7 @@ final class Container
     private $container = [];
 
     /**
-     * @var Pointcut[]
+     * @var array<int, Pointcut>
      */
     private $pointcuts = [];
 
@@ -59,6 +61,8 @@ final class Container
     /**
      * Return dependency injected instance
      *
+     * @param array<int, mixed> $params
+     *
      * @throws Unbound
      *
      * @return mixed
@@ -71,7 +75,7 @@ final class Container
         }
         $dependency = $this->container[$index];
         if (! $dependency instanceof Dependency) {
-            throw new \BadMethodCallException($interface);
+            throw new BadMethodCallException($interface);
         }
 
         return $dependency->injectWithArgs($this, $params);
@@ -118,7 +122,7 @@ final class Container
     public function unbound(string $index)
     {
         [$class, $name] = explode('-', $index);
-        if (class_exists($class) && ! (new \ReflectionClass($class))->isAbstract()) {
+        if (class_exists($class) && ! (new ReflectionClass($class))->isAbstract()) {
             return new Untargeted($class);
         }
 
@@ -138,7 +142,7 @@ final class Container
     /**
      * Return pointcuts
      *
-     * @return Pointcut[]
+     * @return array<int, Pointcut>
      */
     public function getPointcuts() : array
     {

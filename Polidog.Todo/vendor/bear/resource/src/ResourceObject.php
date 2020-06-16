@@ -5,17 +5,25 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use ArrayAccess;
+use ArrayIterator;
+use BEAR\Resource\Exception\IlligalAccessException;
 use Countable;
 use Exception;
 use IteratorAggregate;
 use JsonSerializable;
+use Ray\Di\Di\Inject;
 
+/**
+ * @phpstan-implements \ArrayAccess<string, mixed>
+ * @phpstan-implements \IteratorAggregate<int|string, mixed>
+ */
 abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, ToStringInterface
 {
     /**
      * Uri
      *
      * @var AbstractUri
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     public $uri;
 
@@ -29,28 +37,28 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Resource header
      *
-     * @var array
+     * @var array<string, string>
      */
     public $headers = [];
 
     /**
      * Resource representation
      *
-     * @var null|string
+     * @var ?string
      */
     public $view;
 
     /**
      * Body
      *
-     * @var mixed
+     * @var array<int|string, mixed>|mixed
      */
     public $body;
 
     /**
      * Renderer
      *
-     * @var \BEAR\Resource\RenderInterface
+     * @var ?RenderInterface
      */
     protected $renderer;
 
@@ -63,6 +71,9 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function __toString()
     {
+        if (is_string($this->view)) {
+            return $this->view;
+        }
         try {
             $view = $this->toString();
         } catch (Exception $e) {
@@ -78,6 +89,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     public function __sleep()
     {
         if (is_array($this->body)) {
+            /** @psalm-suppress MixedAssignment */
             foreach ($this->body as &$item) {
                 if ($item instanceof RequestInterface) {
                     $item = ($item)();
@@ -91,11 +103,17 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Returns the body value at the specified index
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
+     *
+     * @return mixed
      */
     public function offsetGet($offset)
     {
-        return $this->body[$offset];
+        if (is_array($this->body)) {
+            return $this->body[$offset];
+        }
+
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
@@ -103,6 +121,8 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      *
      * @param mixed $offset offset
      * @param mixed $value  value
+     *
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
@@ -112,23 +132,29 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Returns whether the requested index in body exists
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      *
      * @return bool
      */
     public function offsetExists($offset)
     {
-        return isset($this->body[$offset]);
+        if (is_array($this->body)) {
+            return isset($this->body[$offset]);
+        }
+
+        throw new IlligalAccessException((string) $offset);
     }
 
     /**
      * Set the value at the specified index
      *
-     * @param mixed $offset offset
+     * @param int|string $offset offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset) : void
     {
-        unset($this->body[$offset]);
+        if (is_array($this->body)) {
+            unset($this->body[$offset]);
+        }
     }
 
     /**
@@ -138,13 +164,17 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function count()
     {
-        return count($this->body);
+        if ($this->body instanceof Countable || is_array($this->body)) {
+            return count($this->body);
+        }
+
+        throw new IlligalAccessException();
     }
 
     /**
      * Sort the entries by key
      */
-    public function ksort()
+    public function ksort() : void
     {
         if (! is_array($this->body)) {
             return;
@@ -155,7 +185,7 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * Sort the entries by key
      */
-    public function asort()
+    public function asort() : void
     {
         if (! is_array($this->body)) {
             return;
@@ -164,22 +194,20 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     }
 
     /**
-     * Get array iterator
+     * @return ArrayIterator<int|string, mixed>
      *
-     * @return \ArrayIterator
+     * @phpstan-return ArrayIterator<int|string, mixed>
+     * @psalm-return ArrayIterator<empty, empty>|ArrayIterator<int|string, mixed>
      */
-    public function getIterator()
+    public function getIterator() : ArrayIterator
     {
-        $isTraversal = (is_array($this->body) || $this->body instanceof \Traversable);
-
-        return $isTraversal ? new \ArrayIterator($this->body) : new \ArrayIterator([]);
+        return is_array($this->body) ? new ArrayIterator((array) $this->body) : new ArrayIterator([]);
     }
 
     /**
-     * Set renderer
+     * @Inject(optional=true)
      *
-     * @return $this
-     * @Ray\Di\Di\Inject(optional=true)
+     * @return self
      */
     public function setRenderer(RenderInterface $renderer)
     {
@@ -193,9 +221,6 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
      */
     public function toString()
     {
-        if ($this->view !== null) {
-            return $this->view;
-        }
         if (! $this->renderer instanceof RenderInterface) {
             $this->renderer = new JsonRenderer;
         }
@@ -203,13 +228,17 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
         return $this->renderer->render($this);
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<int|string, mixed>
+     */
+    public function jsonSerialize() : array
     {
-        $body = $this->evaluate($this->body);
-        $isTraversable = is_array($body) || $body instanceof \Traversable;
-        if (! $isTraversable) {
-            return ['value' => $body];
+        /** @psalm-suppress MixedAssignment */
+        if (! is_iterable($this->body)) {
+            return ['value' => $this->body];
         }
+        $body = $this->evaluate($this->body);
+        assert(is_array($body));
 
         return $body;
     }
@@ -217,20 +246,24 @@ abstract class ResourceObject implements AcceptTransferInterface, ArrayAccess, C
     /**
      * {@inheritdoc}
      */
-    public function transfer(TransferInterface $responder, array $server)
+    public function transfer(TransferInterface $responder, array $server) : void
     {
         $responder($this, $server);
     }
 
+    /**
+     * @param mixed $body
+     *
+     * @return mixed
+     */
     private function evaluate($body)
     {
-        if (is_array($body)) {
-            /* @noinspection ForeachSourceInspection */
-            foreach ($body as &$value) {
-                if ($value instanceof RequestInterface) {
-                    $result = $value();
-                    $value = $result->body;
-                }
+        /* @noinspection ForeachSourceInspection */
+        /** @psalm-suppress MixedAssignment */
+        foreach ($body as &$value) {
+            if ($value instanceof RequestInterface) {
+                $result = $value();
+                $value = $result->body;
             }
         }
 

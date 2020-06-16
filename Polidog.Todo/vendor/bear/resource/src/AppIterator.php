@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 use BEAR\Resource\Exception\ResourceDirException;
+use Iterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
+use SplFileInfo;
 
-final class AppIterator implements \Iterator
+/**
+ * @implements \Iterator<string, Meta>
+ */
+final class AppIterator implements Iterator
 {
     /**
      * @var int
@@ -16,12 +22,12 @@ final class AppIterator implements \Iterator
     private $i = 0;
 
     /**
-     * @var array
+     * @var array<string, Meta>
      */
     private $metaCollection = [];
 
     /**
-     * @var array
+     * @var list<string>
      */
     private $keys = [];
 
@@ -44,7 +50,7 @@ final class AppIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function current()
+    public function current() : Meta
     {
         return $this->metaCollection[$this->keys[$this->i]];
     }
@@ -52,7 +58,7 @@ final class AppIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next() : void
     {
         ++$this->i;
     }
@@ -60,7 +66,7 @@ final class AppIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function key()
+    public function key() : string
     {
         return $this->keys[$this->i];
     }
@@ -68,7 +74,7 @@ final class AppIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid() : bool
     {
         return array_key_exists($this->i, $this->keys);
     }
@@ -76,16 +82,20 @@ final class AppIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind() : void
     {
         $this->i = 0;
     }
 
-    private function getMetaCollection(\Iterator $iterator) : array
+    /**
+     * @param Iterator<SplFileInfo> $iterator
+     *
+     * @return array<string, Meta>
+     */
+    private function getMetaCollection(Iterator $iterator) : array
     {
         $metaCollection = [];
         foreach ($iterator as $item) {
-            /* @var $item \SplFileInfo */
             if ($this->isNotPhp($item)) {
                 continue;
             }
@@ -100,7 +110,7 @@ final class AppIterator implements \Iterator
         return $metaCollection;
     }
 
-    private function isNotPhp(\SplFileInfo $item) : bool
+    private function isNotPhp(SplFileInfo $item) : bool
     {
         $isPhp = $item->isFile()
             && $item->getExtension() === 'php'
@@ -109,22 +119,28 @@ final class AppIterator implements \Iterator
         return ! $isPhp;
     }
 
-    private function getResourceClassName(\SplFileInfo $file) : string
+    private function getResourceClassName(SplFileInfo $file) : string
     {
         $pathName = $file->getPathname();
         $declaredClasses = get_declared_classes();
-        /** @noinspection PhpIncludeInspection */
+        assert(file_exists($pathName));
         include_once $pathName;
         $newClasses = array_values(array_diff_key(get_declared_classes(), $declaredClasses));
         $name = $this->getName($newClasses);
+        assert(is_string($name));
 
         return $name;
     }
 
-    private function getName(array $newClasses) : string
+    /**
+     * @param array<class-string> $newClasses
+     *
+     * @return class-string|string
+     */
+    private function getName(array $newClasses)
     {
         foreach ($newClasses as $newClass) {
-            $parent = (new \ReflectionClass($newClass))->getParentClass();
+            $parent = (new ReflectionClass($newClass))->getParentClass();
             if ($parent && $parent->name === ResourceObject::class) {
                 return $newClass;
             }

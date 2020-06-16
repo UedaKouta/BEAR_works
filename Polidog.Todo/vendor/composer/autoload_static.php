@@ -4,31 +4,25 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
+class ComposerStaticInit4f2d28958d36ef11ea90f3d656eb57cd
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'e8aa6e4b5a1db2f56ae794f1505391a8' => __DIR__ . '/..' . '/amphp/amp/lib/functions.php',
         '76cd0796156622033397994f25b0d8fc' => __DIR__ . '/..' . '/amphp/amp/lib/Internal/functions.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '69a67b432adc06937bd2ba8c0399a44f' => __DIR__ . '/..' . '/ray/aop/annotation_loader.php',
         '6cd5651c4fef5ed6b63e8d8b8ffbf3cc' => __DIR__ . '/..' . '/amphp/byte-stream/lib/functions.php',
         'dc51568953534d6c54b08731e61104e2' => __DIR__ . '/..' . '/vimeo/psalm/src/functions.php',
         '8e4171839e12546525126d38dac3dafa' => __DIR__ . '/..' . '/vimeo/psalm/src/spl_object_id.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '1fe9d3e3db17e3620267b9c4bd5a8cd9' => __DIR__ . '/..' . '/koriym/printo/src/print_o.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '0dc2d59380c105904fe0a8d4c0a1afc5' => __DIR__ . '/..' . '/bear/resource/src-files/uri_template.php',
-        'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
-        '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '5f0e95b8df5acf4a92c896dc3ac4bb6e' => __DIR__ . '/..' . '/phpmetrics/phpmetrics/src/functions.php',
         '8b8ed2736cbc26469fe5aa792fd47798' => __DIR__ . '/..' . '/bear/package/src-files/apcu.php',
@@ -57,7 +51,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
             'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Contracts\\HttpClient\\' => 29,
@@ -86,7 +79,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         'P' => 
         array (
             'Psr\\Log\\' => 8,
-            'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'Psalm\\PhpUnitPlugin\\' => 20,
             'Psalm\\' => 6,
@@ -110,18 +102,12 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         'K' => 
         array (
             'Koriym\\Psr4List\\' => 16,
+            'Koriym\\Printo\\' => 14,
             'Koriym\\HttpConstants\\' => 21,
         ),
         'J' => 
         array (
             'JsonSchema\\' => 11,
-            'JmesPath\\' => 9,
-        ),
-        'G' => 
-        array (
-            'GuzzleHttp\\Psr7\\' => 16,
-            'GuzzleHttp\\Promise\\' => 19,
-            'GuzzleHttp\\' => 11,
         ),
         'D' => 
         array (
@@ -148,7 +134,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         ),
         'A' => 
         array (
-            'Aws\\' => 4,
             'Aura\\Sql\\' => 9,
             'Aura\\SqlQuery\\' => 14,
             'Aura\\Session\\_Config\\' => 21,
@@ -208,10 +193,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Polyfill\\Intl\\Idn\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-idn',
         ),
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
@@ -280,6 +261,7 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         'Ray\\Di\\' => 
         array (
             0 => __DIR__ . '/..' . '/ray/di/src',
+            1 => __DIR__ . '/..' . '/ray/di/src-deprecated',
         ),
         'Ray\\Compiler\\' => 
         array (
@@ -301,10 +283,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-        ),
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Container\\' => 
         array (
@@ -363,6 +341,10 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         array (
             0 => __DIR__ . '/..' . '/koriym/psr4list/src',
         ),
+        'Koriym\\Printo\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/koriym/printo/src',
+        ),
         'Koriym\\HttpConstants\\' => 
         array (
             0 => __DIR__ . '/..' . '/koriym/http-constants/src',
@@ -370,22 +352,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         'JsonSchema\\' => 
         array (
             0 => __DIR__ . '/..' . '/justinrainbow/json-schema/src/JsonSchema',
-        ),
-        'JmesPath\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mtdowling/jmespath.php/src',
-        ),
-        'GuzzleHttp\\Psr7\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
-        ),
-        'GuzzleHttp\\Promise\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
-        ),
-        'GuzzleHttp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -446,10 +412,6 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
         array (
             0 => __DIR__ . '/..' . '/bear/app-meta/src',
             1 => __DIR__ . '/..' . '/bear/app-meta/src-deprecated',
-        ),
-        'Aws\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/aws/aws-sdk-php/src',
         ),
         'Aura\\Sql\\' => 
         array (
@@ -1291,10 +1253,10 @@ class ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit5fcae2aead358c56bc6ab67041cd017c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4f2d28958d36ef11ea90f3d656eb57cd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4f2d28958d36ef11ea90f3d656eb57cd::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4f2d28958d36ef11ea90f3d656eb57cd::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4f2d28958d36ef11ea90f3d656eb57cd::$classMap;
 
         }, null, ClassLoader::class);
     }

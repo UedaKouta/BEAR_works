@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace BEAR\Resource;
 
 use function is_callable;
@@ -44,6 +42,7 @@ final class Invoker implements InvokerInterface
             return ($this->extraMethod)($request, $this);
         }
         $params = $this->params->getParameters($callable, $request->query);
+        /** @psalm-suppress MixedAssignment */
         $response = call_user_func_array($callable, $params);
         if (! $response instanceof ResourceObject) {
             $request->resourceObject->body = $response;

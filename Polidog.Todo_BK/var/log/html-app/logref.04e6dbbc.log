@@ -1,0 +1,64 @@
+Fri, 05 Jun 2020 01:24:27 +0000
+post page://self/?todo%5Btitle%5D=dsad&submit=%E7%99%BB%E9%8C%B2
+
+Ray\Di\Exception\Unbound(dependency 'Ray\WebFormModule\FormInterface' with name 'todo_form' used in /Applications/MAMP/htdocs/Polidog.Todo/src/Resource/Page/Index.php:28 ($todoForm))
+ in file /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/NodeFactory.php on line 110
+
+#0 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/NodeFactory.php(63): Ray\Compiler\NodeFactory->getDefault(Object(Ray\Di\Argument))
+#1 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/FactoryCode.php(95): Ray\Compiler\NodeFactory->getNode(Object(Ray\Di\Argument))
+#2 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/FactoryCode.php(111): Ray\Compiler\FactoryCode->getArgStmt(Object(Ray\Di\Argument))
+#3 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/FactoryCode.php(69): Ray\Compiler\FactoryCode->getConstructorInjection('Polidog\\Todo\\Re...', Array)
+#4 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/DependencyCode.php(186): Ray\Compiler\FactoryCode->getFactoryCode('Polidog\\Todo\\Re...', Array, Array, '')
+#5 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/DependencyCode.php(128): Ray\Compiler\DependencyCode->getFactoryNode(Object(Ray\Di\Dependency))
+#6 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/DependencyCode.php(80): Ray\Compiler\DependencyCode->getDependencyCode(Object(Ray\Di\Dependency))
+#7 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/OnDemandCompiler.php(61): Ray\Compiler\DependencyCode->getCode(Object(Ray\Di\Dependency))
+#8 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/ScriptInjector.php(235): Ray\Compiler\OnDemandCompiler->__invoke('Polidog\\Todo\\Re...')
+#9 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/ScriptInjector.php(196): Ray\Compiler\ScriptInjector->compileOnDemand('Polidog\\Todo\\Re...')
+#10 /Applications/MAMP/htdocs/Polidog.Todo/vendor/ray/compiler/src/ScriptInjector.php(138): Ray\Compiler\ScriptInjector->getInstanceFile('Polidog\\Todo\\Re...')
+#11 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/AppAdapter.php(56): Ray\Compiler\ScriptInjector->getInstance('Polidog\\Todo\\Re...')
+#12 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/Factory.php(50): BEAR\Resource\AppAdapter->get(Object(BEAR\Resource\Uri))
+#13 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/Resource.php(107): BEAR\Resource\Factory->newInstance(Object(BEAR\Resource\Uri))
+#14 /Applications/MAMP/htdocs/Polidog.Todo/vendor/bear/resource/src/Resource.php(127): BEAR\Resource\Resource->newInstance(Object(BEAR\Resource\Uri))
+#15 /Applications/MAMP/htdocs/Polidog.Todo/bootstrap.php(14): BEAR\Resource\Resource->uri('page://self/')
+#16 /Applications/MAMP/htdocs/Polidog.Todo/public/index.php(4): {closure}('html-app')
+#17 {main}
+
+PHP Variables
+
+$_SERVER => Array
+(
+    [DOCUMENT_ROOT] => /Applications/MAMP/htdocs/Polidog.Todo
+    [REMOTE_ADDR] => 127.0.0.1
+    [REMOTE_PORT] => 51218
+    [SERVER_SOFTWARE] => PHP 7.4.6 Development Server
+    [SERVER_PROTOCOL] => HTTP/1.1
+    [SERVER_NAME] => 127.0.0.1
+    [SERVER_PORT] => 8080
+    [REQUEST_URI] => /
+    [REQUEST_METHOD] => POST
+    [SCRIPT_NAME] => /
+    [SCRIPT_FILENAME] => public/index.php
+    [PHP_SELF] => /
+    [HTTP_HOST] => 127.0.0.1:8080
+    [HTTP_CONNECTION] => keep-alive
+    [CONTENT_LENGTH] => 245
+    [HTTP_CONTENT_LENGTH] => 245
+    [HTTP_CACHE_CONTROL] => max-age=0
+    [HTTP_UPGRADE_INSECURE_REQUESTS] => 1
+    [HTTP_USER_AGENT] => Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36
+    [HTTP_ORIGIN] => http://127.0.0.1:8080
+    [CONTENT_TYPE] => multipart/form-data; boundary=----WebKitFormBoundaryt2Oab8d4wppESjyS
+    [HTTP_CONTENT_TYPE] => multipart/form-data; boundary=----WebKitFormBoundaryt2Oab8d4wppESjyS
+    [HTTP_ACCEPT] => text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+    [HTTP_SEC_FETCH_SITE] => same-origin
+    [HTTP_SEC_FETCH_MODE] => navigate
+    [HTTP_SEC_FETCH_USER] => ?1
+    [HTTP_SEC_FETCH_DEST] => document
+    [HTTP_REFERER] => http://127.0.0.1:8080/
+    [HTTP_ACCEPT_ENCODING] => gzip, deflate, br
+    [HTTP_ACCEPT_LANGUAGE] => ja,en-US;q=0.9,en;q=0.8
+    [REQUEST_TIME_FLOAT] => 1591320266.8286
+    [REQUEST_TIME] => 1591320266
+)
+
+

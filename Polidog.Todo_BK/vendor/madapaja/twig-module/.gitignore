@@ -1,0 +1,7 @@
+vendor/
+*.iml
+.idea/
+build/
+composer.lock
+.DS_Store
+.php_cs.cache

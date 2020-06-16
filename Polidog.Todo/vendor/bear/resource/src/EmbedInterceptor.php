@@ -40,6 +40,7 @@ final class EmbedInterceptor implements MethodInterceptor
         $ro = $invocation->getThis();
         $method = $invocation->getMethod();
         $query = $this->getArgsByInvocation($invocation);
+        /** @var array<object> $embeds */
         $embeds = $this->reader->getMethodAnnotations($method);
         $this->embedResource($embeds, $ro, $query);
 
@@ -47,21 +48,26 @@ final class EmbedInterceptor implements MethodInterceptor
     }
 
     /**
-     * @param Embed[] $embeds
+     * @param array<Embed|object>  $embeds
+     * @param array<string, mixed> $query
      *
      * @throws EmbedException
+     *
+     * @psalm-suppress NoInterfaceProperties
+     * @psalm-suppress MixedMethodCall
      */
-    private function embedResource(array $embeds, ResourceObject $ro, array $query)
+    private function embedResource(array $embeds, ResourceObject $ro, array $query) : void
     {
         foreach ($embeds as $embed) {
-            /* @var $embed Embed */
             if (! $embed instanceof Embed) {
                 continue;
             }
             try {
                 $templateUri = $this->getFullUri($embed->src, $ro);
                 $uri = uri_template($templateUri, $query);
-                $ro->body[$embed->rel] = clone $this->resource->get->uri($uri);
+                /** @var Request $request */
+                $request = $this->resource->get->uri($uri);
+                $ro->body[$embed->rel] = clone $request;
             } catch (BadRequestException $e) {
                 // wrap ResourceNotFound or Uri exception
                 throw new EmbedException($embed->src, 500, $e);
@@ -78,13 +84,17 @@ final class EmbedInterceptor implements MethodInterceptor
         return $uri;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getArgsByInvocation(MethodInvocation $invocation) : array
     {
         $args = $invocation->getArguments()->getArrayCopy();
         $params = $invocation->getMethod()->getParameters();
         $namedParameters = [];
         foreach ($params as $param) {
-            $namedParameters[$param->name] = array_shift($args);
+            /** @psalm-suppress MixedAssignment */
+            $namedParameters[(string) $param->name] = array_shift($args);
         }
 
         return $namedParameters;

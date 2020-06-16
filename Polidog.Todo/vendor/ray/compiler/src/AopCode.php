@@ -6,6 +6,7 @@ namespace Ray\Compiler;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Scalar;
 use Ray\Di\Dependency;
 use Ray\Di\Name;
@@ -24,25 +25,35 @@ final class AopCode
 
     /**
      * Add aop factory code if bindings are given
+     *
+     * @param array<Expr> $node
+     *
+     * @param-out array<Expr|mixed> $node
      */
-    public function __invoke(Dependency $dependency, array &$node)
+    public function __invoke(Dependency $dependency, array &$node) : void
     {
         $prop = $this->privateProperty;
         $newInstance = $prop($dependency, 'newInstance');
         $bind = $prop($newInstance, 'bind');
         $bind = $prop($bind, 'bind');
-        /** @var string[][] $bindings */
+        /** @var null|string[][] $bindings */
         $bindings = $prop($bind, 'bindings', null);
-        if (! $bindings || ! \is_array($bindings)) {
+        if (! \is_array($bindings)) {
             return;
         }
         $methodBinding = $this->getMethodBinding($bindings);
         $bindingsProp = new Expr\PropertyFetch(new Expr\Variable('instance'), 'bindings');
-        $bindingsAssign = new Expr\Assign($bindingsProp, new Expr\Array_($methodBinding));
+        $bindingsAssign = new Assign($bindingsProp, new Expr\Array_($methodBinding));
         $this->setBindingAssignAfterInitialization($node, [$bindingsAssign], 1);
     }
 
-    private function setBindingAssignAfterInitialization(array &$array, array $insertValue, int $position)
+    /**
+     * @param array<Expr>   $array
+     * @param array<Assign> $insertValue
+     *
+     * @param-out array<Expr|mixed> $array
+     */
+    private function setBindingAssignAfterInitialization(array &$array, array $insertValue, int $position) : void
     {
         $array = \array_merge(\array_splice($array, 0, $position), $insertValue, $array);
     }

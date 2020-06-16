@@ -6,6 +6,7 @@ namespace Ray\Di;
 
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Exception\Unbound;
+use ReflectionMethod;
 
 class SetterMethodTest extends TestCase
 {
@@ -16,12 +17,12 @@ class SetterMethodTest extends TestCase
 
     protected function setUp() : void
     {
-        $method = new \ReflectionMethod(FakeCar::class, 'setTires');
+        $method = new ReflectionMethod(FakeCar::class, 'setTires');
         $setterMethod = new SetterMethod($method, new Name(Name::ANY));
         $this->setterMethods = new SetterMethods([$setterMethod]);
     }
 
-    public function testInvoke()
+    public function testInvoke() : void
     {
         $container = new Container;
         (new Bind($container, FakeTyreInterface::class))->to(FakeTyre::class);
@@ -33,7 +34,7 @@ class SetterMethodTest extends TestCase
         $this->assertNotSame(spl_object_hash($car->frontTyre), spl_object_hash($car->rearTyre));
     }
 
-    public function testUnbound()
+    public function testUnbound() : void
     {
         $this->expectException(Unbound::class);
         $container = new Container;

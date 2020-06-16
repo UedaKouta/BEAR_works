@@ -54,6 +54,7 @@ final class FunctionCode
         $func = $isSingleton ? 'singleton' : 'prototype';
         $args = $this->getInjectionFuncParams($argument);
 
+        /** @var array<Node\Arg> $args */
         return new Expr\FuncCall(new Expr\Variable($func), $args);
     }
 
@@ -62,7 +63,7 @@ final class FunctionCode
      *
      * [class, method, param] is added if dependency is provider for DI context
      *
-     * @return Node\Arg[]
+     * @return array<int, Node\Arg|Node\Expr\Array_>
      */
     private function getInjectionFuncParams(Argument $argument) : array
     {
@@ -78,6 +79,8 @@ final class FunctionCode
      * Return code for provider
      *
      * "$provider" needs [class, method, parameter] for InjectionPoint (Contextual Dependency Injection)
+     *
+     * @return array<int, Expr\Array_|Node\Arg>
      */
     private function getInjectionProviderParams(Argument $argument) : array
     {
@@ -87,6 +90,7 @@ final class FunctionCode
             throw new \LogicException; // @codeCoverageIgnore
         }
         $method = $param->getDeclaringFunction();
+        assert($method instanceof \ReflectionMethod);
         $this->setQualifiers($method, $param);
 
         return [
@@ -99,7 +103,7 @@ final class FunctionCode
         ];
     }
 
-    private function setQualifiers(\ReflectionMethod $method, \ReflectionParameter $param)
+    private function setQualifiers(\ReflectionMethod $method, \ReflectionParameter $param) : void
     {
         $annotations = $this->reader->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
