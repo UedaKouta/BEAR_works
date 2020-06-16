@@ -8,8 +8,6 @@ class FakeAssistedConsumer
 {
     /**
      * @Assisted({"robot"})
-     *
-     * @return FakeRobotInterface|null
      */
     public function assistOne($a, $b, FakeRobotInterface $robot = null)
     {
@@ -27,12 +25,7 @@ class FakeAssistedConsumer
 
     /**
      * @Assisted({"var2", "robot"})
-     *
      * @Named("var2=one")
-     *
-     * @return (FakeRobotInterface|mixed|null)[]
-     *
-     * @psalm-return array{0: mixed, 1: FakeRobotInterface|null}
      */
     public function assistAny($var2 = null, FakeRobotInterface $robot = null)
     {

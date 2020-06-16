@@ -2,7 +2,6 @@
 namespace Ray\Di;
 
 use Ray\Di\Di\Named;
-use ReflectionParameter;
 
 class FakeInjectionPoint implements ProviderInterface
 {
@@ -11,7 +10,7 @@ class FakeInjectionPoint implements ProviderInterface
     /**
      * @Named("aa")
      */
-    public function __construct(ReflectionParameter $ip)
+    public function __construct(\ReflectionParameter $ip)
     {
         $this->ip = $ip;
     }

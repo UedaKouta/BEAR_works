@@ -15,10 +15,11 @@ if (! file_exists(__DIR__ . '/.cache')) {
 
 $max = 1;
 $start = microtime(true);
-$compiler = new Compiler(__DIR__ . '/tmp');
+$compiler = new Compiler($_ENV['TMP_DIR']);
 cache_reads:
     for ($i = 0; $i < $max; $i++) {
         [$bind, $time1] = unserialize(file_get_contents($cache));
+        var_dump($bind);
         $billingService2 = $compiler->newInstance(AnnotationRealBillingService::class, [], $bind);
     }
 

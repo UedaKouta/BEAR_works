@@ -32,7 +32,7 @@ class JsonSchemaLinkHeaderModule extends AbstractModule
     /**
      * {@inheritdoc}
      */
-    protected function configure() : void
+    protected function configure()
     {
         $this->bind()->annotatedWith('json_schema_host')->toInstance($this->jsonSchemaHost);
     }

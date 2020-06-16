@@ -9,8 +9,6 @@ use Ray\Aop\Compiler;
 use Ray\Aop\Matcher;
 use Ray\Aop\Pointcut;
 use Ray\Aop\WeavedInterface;
-use ReflectionClass;
-use ReflectionMethod;
 
 class DependencyTest extends TestCase
 {
@@ -21,14 +19,14 @@ class DependencyTest extends TestCase
 
     protected function setUp() : void
     {
-        $class = new ReflectionClass(FakeCar::class);
+        $class = new \ReflectionClass(FakeCar::class);
         $setters = [];
         $name = new Name(Name::ANY);
-        $setters[] = new SetterMethod(new ReflectionMethod(FakeCar::class, 'setTires'), $name);
-        $setters[] = new SetterMethod(new ReflectionMethod(FakeCar::class, 'setHardtop'), $name);
+        $setters[] = new SetterMethod(new \ReflectionMethod(FakeCar::class, 'setTires'), $name);
+        $setters[] = new SetterMethod(new \ReflectionMethod(FakeCar::class, 'setHardtop'), $name);
         $setterMethods = new SetterMethods($setters);
         $newInstance = new NewInstance($class, $setterMethods);
-        $this->dependency = new Dependency($newInstance, new ReflectionMethod(FakeCar::class, 'postConstruct'));
+        $this->dependency = new Dependency($newInstance, new \ReflectionMethod(FakeCar::class, 'postConstruct'));
     }
 
     protected function tearDown() : void
@@ -36,12 +34,7 @@ class DependencyTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @return Container[][]
-     *
-     * @psalm-return array{0: array{0: Container}}
-     */
-    public function containerProvider() : array
+    public function containerProvider()
     {
         $container = new Container;
         (new Bind($container, FakeTyreInterface::class))->to(FakeTyre::class);
@@ -54,7 +47,7 @@ class DependencyTest extends TestCase
     /**
      * @dataProvider containerProvider
      */
-    public function testInject(Container $container) : void
+    public function testInject(Container $container)
     {
         $car = $this->dependency->inject($container);
         /* @var $car FakeCar */
@@ -64,7 +57,7 @@ class DependencyTest extends TestCase
     /**
      * @dataProvider containerProvider
      */
-    public function testSetterInjection(Container $container) : void
+    public function testSetterInjection(Container $container)
     {
         $car = $this->dependency->inject($container);
         /* @var $car FakeCar */
@@ -75,7 +68,7 @@ class DependencyTest extends TestCase
     /**
      * @dataProvider containerProvider
      */
-    public function testPostConstruct(Container $container) : void
+    public function testPostConstruct(Container $container)
     {
         $car = $this->dependency->inject($container);
         /* @var $car FakeCar */
@@ -85,7 +78,7 @@ class DependencyTest extends TestCase
     /**
      * @dataProvider containerProvider
      */
-    public function testPrototype(Container $container) : void
+    public function testPrototype(Container $container)
     {
         $this->dependency->setScope(Scope::PROTOTYPE);
         $car1 = $this->dependency->inject($container);
@@ -96,7 +89,7 @@ class DependencyTest extends TestCase
     /**
      * @dataProvider containerProvider
      */
-    public function testSingleton(Container $container) : void
+    public function testSingleton(Container $container)
     {
         $this->dependency->setScope(Scope::SINGLETON);
         $car1 = $this->dependency->inject($container);
@@ -104,15 +97,15 @@ class DependencyTest extends TestCase
         $this->assertSame(spl_object_hash($car1), spl_object_hash($car2));
     }
 
-    public function testInjectInterceptor() : void
+    public function testInjectInterceptor()
     {
-        $dependency = new Dependency(new NewInstance(new ReflectionClass(FakeAop::class), new SetterMethods([])));
+        $dependency = new Dependency(new NewInstance(new \ReflectionClass(FakeAop::class), new SetterMethods([])));
         $pointcut = new Pointcut((new Matcher)->any(), (new Matcher)->any(), [FakeDoubleInterceptor::class]);
         $dependency->weaveAspects(new Compiler($_ENV['TMP_DIR']), [$pointcut]);
         $container = new Container;
         $container->add((new Bind($container, FakeDoubleInterceptor::class))->to(FakeDoubleInterceptor::class));
         $instance = $dependency->inject($container);
-        $isWeave = (new ReflectionClass($instance))->implementsInterface(WeavedInterface::class);
+        $isWeave = (new \ReflectionClass($instance))->implementsInterface(WeavedInterface::class);
         $this->assertTrue($isWeave);
         $this->assertArrayHasKey('returnSame', $instance->bindings);
     }

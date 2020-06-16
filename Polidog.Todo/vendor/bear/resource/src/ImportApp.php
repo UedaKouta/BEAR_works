@@ -7,21 +7,39 @@ namespace BEAR\Resource;
 final class ImportApp
 {
     /**
+     * Host name
+     *
      * @var string
      */
     public $host;
 
     /**
+     * App name
+     *
      * @var string
      */
     public $appName;
 
     /**
+     * Context
+     *
      * @var string
      */
     public $context;
 
-    public function __construct(string $host, string $appName, string $context)
+    /**
+     * Script dir
+     *
+     * @var string
+     */
+    public $scriptDir;
+
+    /**
+     * @param string $host
+     * @param string $appName
+     * @param string $context
+     */
+    public function __construct($host, $appName, $context)
     {
         $this->host = $host;
         $this->appName = $appName;

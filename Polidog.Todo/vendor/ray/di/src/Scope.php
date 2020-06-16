@@ -11,12 +11,12 @@ final class Scope
      *
      * @var string
      */
-    public const SINGLETON = 'Singleton';
+    const SINGLETON = 'Singleton';
 
     /**
      * Prototype scope
      *
      * @var string
      */
-    public const PROTOTYPE = 'Prototype';
+    const PROTOTYPE = 'Prototype';
 }

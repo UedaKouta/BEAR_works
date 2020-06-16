@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ResourceObjectTest extends TestCase
 {
-    public function testTransfer() : void
+    public function testTransfer()
     {
         $ro = new FakeResource;
         $responder = new FakeResponder;
@@ -17,25 +17,25 @@ class ResourceObjectTest extends TestCase
         $this->assertSame(FakeResource::class, $responder->class);
     }
 
-    public function testSerialize() : void
+    public function testSerialize()
     {
         $ro = new FakeFreeze;
         $ro->uri = new Uri('app://self/freeze');
         $body = $ro->body;
         $serialized = serialize($ro);
-        $this->assertIsString($serialized);
+        $this->assertInternalType('string', $serialized);
         $ro = unserialize($serialized);
         $this->assertInstanceOf(Author::class, $ro['user']);
         $expected = 'app://self/freeze';
         $this->assertSame($expected, (string) $ro->uri);
     }
 
-    public function testJson() : void
+    public function testJson()
     {
         $ro = new FakeFreeze;
         $ro->uri = new Uri('app://self/freeze');
         $json = json_encode($ro);
-        $this->assertIsString($json);
+        $this->assertInternalType('string', $json);
         $expected = '{"php":"7","user":{"name":"Aramis","age":16,"blog_id":12}}';
         $this->assertSame($expected, $json);
     }

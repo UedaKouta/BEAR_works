@@ -25,10 +25,6 @@ final class HalLink
         return ($this->link)($uri);
     }
 
-    /**
-     * @param array{_links?: array<string, array{href: string}>} $body
-     * @param list<object>                                       $methodAnnotations
-     */
     public function addHalLink(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
         if (! empty($methodAnnotations)) {
@@ -41,10 +37,6 @@ final class HalLink
         return $hal;
     }
 
-    /**
-     * @param array<int|string, mixed>|array{_links: string} $body
-     * @param list<Link|object>                              $methodAnnotations
-     */
     private function linkAnnotation(array $body, array $methodAnnotations, Hal $hal) : Hal
     {
         foreach ($methodAnnotations as $annotation) {
@@ -63,11 +55,6 @@ final class HalLink
         return $hal;
     }
 
-    /**
-     * @param array{_links: array<int|string, array{href?: string}>} $body
-     *
-     * User can set `_links` array as a `Links` annotation
-     */
     private function bodyLink(array $body, Hal $hal) : Hal
     {
         foreach ((array) $body['_links'] as $rel => $link) {

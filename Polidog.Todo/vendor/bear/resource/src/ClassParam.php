@@ -24,9 +24,6 @@ final class ClassParam implements ParamInterface
      */
     private $defaultValue;
 
-    /**
-     * @param ReflectionClass<ResourceObject> $class
-     */
     public function __construct(ReflectionClass $class, \ReflectionParameter $parameter)
     {
         $this->class = $class->name;
@@ -51,9 +48,7 @@ final class ClassParam implements ParamInterface
             throw $e;
         }
         assert(class_exists($this->class));
-        /** @psalm-suppress MixedMethodCall */
         $obj = new $this->class;
-        /** @psalm-suppress MixedAssignment */
         foreach ($props as $propName => $propValue) {
             $obj->{$propName} = $propValue;
         }
@@ -61,11 +56,6 @@ final class ClassParam implements ParamInterface
         return $obj;
     }
 
-    /**
-     * @param array<string, array<string, mixed>> $query
-     *
-     * @return array<string, mixed>
-     */
     private function getProps(string $varName, array $query, InjectorInterface $injector) : array
     {
         if (isset($query[$varName])) {

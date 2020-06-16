@@ -31,8 +31,6 @@ final class Factory implements FactoryInterface
      *
      * @Inject(optional = true)
      * @codeCoverageIgnore
-     *
-     * @return void
      */
     public function setSchemeCollection(SchemeCollectionInterface $scheme)
     {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Ray\Compiler;
 
+use PhpParser\Node;
+
 final class IpQualifier
 {
     /**
@@ -16,7 +18,12 @@ final class IpQualifier
      */
     public $qualifier;
 
-    public function __construct(\ReflectionParameter $param, object $qualifier)
+    /**
+     * @var Node
+     */
+    private $node;
+
+    public function __construct(\ReflectionParameter $param, $qualifier)
     {
         $this->param = $param;
         $this->qualifier = $qualifier;

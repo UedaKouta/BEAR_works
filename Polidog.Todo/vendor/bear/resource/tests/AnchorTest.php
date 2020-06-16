@@ -31,14 +31,14 @@ class AnchorTest extends TestCase
         $this->anchor = new Anchor(new AnnotationReader);
     }
 
-    public function testHref() : void
+    public function testHref()
     {
-        [$method, $uri] = $this->anchor->href('blog', $this->request, []);
+        list($method, $uri) = $this->anchor->href('blog', $this->request, []);
         $this->assertSame(Request::GET, $method);
         $this->assertSame('app://self/blog?id=12', $uri);
     }
 
-    public function testInvalid() : void
+    public function testInvalid()
     {
         $this->expectException(LinkException::class);
         $this->anchor->href('invalid', $this->request, []);

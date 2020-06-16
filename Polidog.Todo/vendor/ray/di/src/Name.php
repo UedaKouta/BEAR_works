@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ray\Di;
 
-use ReflectionParameter;
 use function substr;
 
 final class Name
@@ -12,7 +11,7 @@ final class Name
     /**
      * 'Unnamed' name
      */
-    public const ANY = '';
+    const ANY = '';
 
     /**
      * @var string
@@ -35,7 +34,7 @@ final class Name
         }
     }
 
-    public function __invoke(ReflectionParameter $parameter) : string
+    public function __invoke(\ReflectionParameter $parameter) : string
     {
         // single variable named binding
         if ($this->name) {
@@ -76,9 +75,6 @@ final class Name
         $this->names = $this->parseName($name);
     }
 
-    /**
-     * @return array<string, string>
-     */
     private function parseName(string $name) : array
     {
         $names = [];
@@ -87,7 +83,6 @@ final class Name
             $exploded = explode('=', $keyValue);
             if (isset($exploded[1])) {
                 [$key, $value] = $exploded;
-                assert(is_string($key));
                 if (isset($key[0]) && $key[0] === '$') {
                     $key = substr($key, 1);
                 }

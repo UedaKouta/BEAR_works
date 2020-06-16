@@ -2,14 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Ray\Aop\Demo;
+require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/src/FooClass_Optimized.php';
 
 use Ray\Aop\Bind;
 use Ray\Aop\Compiler;
 use Ray\Aop\NullInterceptor;
 
-require __DIR__ . '/bootstrap.php';
-require __DIR__ . '/src/FooClass_Optimized.php';
+class benchmark
+{
+    public function intercepted()
+    {
+    }
+
+    public function noInterceptor()
+    {
+    }
+}
 
 $tmpDir = __DIR__ . '/tmp';
 $compiler = new Compiler($tmpDir);

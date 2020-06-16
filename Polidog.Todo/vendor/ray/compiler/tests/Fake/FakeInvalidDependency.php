@@ -19,8 +19,4 @@ class FakeInvalidDependency implements DependencyInterface
     public function setScope($scope)
     {
     }
-
-    public function __toString()
-    {
-    }
 }

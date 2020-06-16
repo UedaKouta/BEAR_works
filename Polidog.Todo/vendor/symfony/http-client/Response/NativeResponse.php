@@ -220,6 +220,11 @@ final class NativeResponse implements ResponseInterface
      */
     private static function perform(ClientState $multi, array &$responses = null): void
     {
+        // List of native handles for stream_select()
+        if (null !== $responses) {
+            $multi->handles = [];
+        }
+
         foreach ($multi->openHandles as $i => [$h, $buffer, $onProgress]) {
             $hasActivity = false;
             $remaining = &$multi->openHandles[$i][3];
@@ -286,6 +291,8 @@ final class NativeResponse implements ResponseInterface
                 $multi->handlesActivity[$i][] = $e;
                 unset($multi->openHandles[$i]);
                 $multi->sleep = false;
+            } elseif (null !== $responses) {
+                $multi->handles[] = $h;
             }
         }
 
@@ -300,7 +307,7 @@ final class NativeResponse implements ResponseInterface
             }
         }
 
-        if (\count($multi->openHandles) >= $multi->maxHostConnections) {
+        if (\count($multi->handles) >= $multi->maxHostConnections) {
             return;
         }
 
@@ -310,6 +317,10 @@ final class NativeResponse implements ResponseInterface
                 $response->open();
                 $multi->sleep = false;
                 self::perform($multi);
+
+                if (null !== $response->handle) {
+                    $multi->handles[] = $response->handle;
+                }
 
                 break;
             }
@@ -324,8 +335,7 @@ final class NativeResponse implements ResponseInterface
     private static function select(ClientState $multi, float $timeout): int
     {
         $_ = [];
-        $handles = array_column($multi->openHandles, 0);
 
-        return (!$multi->sleep = !$multi->sleep) ? -1 : stream_select($handles, $_, $_, (int) $timeout, (int) (1E6 * ($timeout - (int) $timeout)));
+        return (!$multi->sleep = !$multi->sleep) ? -1 : stream_select($multi->handles, $_, $_, (int) $timeout, (int) (1E6 * ($timeout - (int) $timeout)));
     }
 }

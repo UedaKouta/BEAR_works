@@ -16,10 +16,10 @@ use Ray\Di\Injector;
 
 class OptionsMethodHeaderModuleTest extends TestCase
 {
-    public function testOptionsMethodHeaderModule() : void
+    public function testOptionsMethodHeaderModule()
     {
         $injector = new Injector(new OptionsMethodHeaderModule(new class extends AbstractModule {
-            protected function configure() : void
+            protected function configure()
             {
                 $this->bind(OptionsMethods::class);
                 $this->bind(Reader::class)->to(AnnotationReader::class);

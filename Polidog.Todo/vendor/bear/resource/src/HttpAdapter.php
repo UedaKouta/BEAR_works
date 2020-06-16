@@ -28,9 +28,6 @@ final class HttpAdapter implements AdapterInterface
     {
         unset($uri);
 
-        $httpRo = $this->injector->getInstance(HttpResourceObject::class);
-        assert($httpRo instanceof HttpResourceObject);
-
-        return $httpRo;
+        return $this->injector->getInstance(HttpResourceObject::class);
     }
 }

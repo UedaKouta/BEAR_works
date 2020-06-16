@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Ray\Di;
 
-use function is_array;
 use Ray\Di\Exception\InvalidToConstructorNameParameter;
-use ReflectionClass;
-use ReflectionMethod;
 
 final class Bind
 {
@@ -38,7 +35,7 @@ final class Bind
     private $validate;
 
     /**
-     * @var ?Untarget
+     * @var null|Untarget
      */
     private $untarget;
 
@@ -51,7 +48,7 @@ final class Bind
         $this->container = $container;
         $this->interface = $interface;
         $this->validate = new BindValidator;
-        $bindUntarget = class_exists($interface) && ! (new ReflectionClass($interface))->isAbstract() && ! $this->isRegistered($interface);
+        $bindUntarget = class_exists($interface) && ! (new \ReflectionClass($interface))->isAbstract() && ! $this->isRegistered($interface);
         $this->bound = new NullDependency;
         if ($bindUntarget) {
             assert(class_exists($interface));
@@ -101,20 +98,20 @@ final class Bind
     /**
      * Bind to constructor
      *
-     * @param string                       $class           class name
-     * @param array<string, string>|string $name            "varName=bindName,..." or [[$varName => $bindName],[$varName => $bindName]...]
-     * @param InjectionPoints              $injectionPoints injection points
-     * @param string                       $postConstruct   method name of initialization after all dependencies are injected*
+     * @param string          $class           class name
+     * @param string | array  $name            "varName=bindName,..." or [[$varName => $bindName],[$varName => $bindName]...]
+     * @param InjectionPoints $injectionPoints injection points
+     * @param string          $postConstruct   method name of initialization after all dependencies are injected*
      */
     public function toConstructor(string $class, $name, InjectionPoints $injectionPoints = null, string $postConstruct = null) : self
     {
-        if (is_array($name)) {
+        if (\is_array($name)) {
             $name = $this->getStringName($name);
         }
         $this->untarget = null;
-        $postConstructRef = $postConstruct ? new ReflectionMethod($class, $postConstruct) : null;
+        $postConstructRef = $postConstruct ? new \ReflectionMethod($class, $postConstruct) : null;
         assert(class_exists($class));
-        $this->bound = (new DependencyFactory)->newToConstructor(new ReflectionClass($class), $name, $injectionPoints, $postConstructRef);
+        $this->bound = (new DependencyFactory)->newToConstructor(new \ReflectionClass($class), $name, $injectionPoints, $postConstructRef);
         $this->container->add($this);
 
         return $this;
@@ -184,8 +181,6 @@ final class Bind
      *
      * input: ['varA' => 'nameA', 'varB' => 'nameB']
      * output: "varA=nameA,varB=nameB"
-     *
-     * @param array<string, string> $name
      */
     private function getStringName(array $name) : string
     {
@@ -201,11 +196,10 @@ final class Bind
                     throw new InvalidToConstructorNameParameter((string) $key);
                 }
                 $varName = $name[$key];
-                /** @psalm-suppress DocblockTypeContradiction */
                 if (! is_string($varName)) {
                     throw new InvalidToConstructorNameParameter(print_r($varName, true));
                 }
-                $carry[] = $key . '=' . (string) $varName;
+                $carry[] = $key . '=' . $varName;
 
                 return $carry;
             },

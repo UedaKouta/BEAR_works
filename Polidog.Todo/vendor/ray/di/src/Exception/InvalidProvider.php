@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ray\Di\Exception;
 
-use InvalidArgumentException;
-
-class InvalidProvider extends InvalidArgumentException implements ExceptionInterface
+class InvalidProvider extends \InvalidArgumentException implements ExceptionInterface
 {
 }

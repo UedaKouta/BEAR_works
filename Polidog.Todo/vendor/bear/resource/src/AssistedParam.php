@@ -11,7 +11,7 @@ final class AssistedParam implements ParamInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(string $varName, array $query, InjectorInterface $injector) : void
+    public function __invoke(string $varName, array $query, InjectorInterface $injector)
     {
         unset($varName, $query, $injector);
     }

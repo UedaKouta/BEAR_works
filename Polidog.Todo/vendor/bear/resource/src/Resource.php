@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace BEAR\Resource;
 
 /**
- * @property-read $this $get
- * @property-read $this $post
- * @property-read $this $put
- * @property-read $this $patch
- * @property-read $this $delete
- * @property-read $this $head
- * @property-read $this $options
+ * @property $this $get
+ * @property $this $post
+ * @property $this $put
+ * @property $this $patch
+ * @property $this $delete
+ * @property $this $head
+ * @property $this $options
  */
 final class Resource implements ResourceInterface
 {
@@ -45,7 +45,6 @@ final class Resource implements ResourceInterface
      * Request
      *
      * @var Request
-     * @psalm-suppress PropertyNotSetInConstructor
      */
     private $request;
 
@@ -84,7 +83,12 @@ final class Resource implements ResourceInterface
         $this->uri = $uri;
     }
 
-    public function __get(string $name) : self
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function __get($name)
     {
         $this->method = $name;
 
@@ -129,17 +133,12 @@ final class Resource implements ResourceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @psalm-suppress MixedPropertyFetch
      */
     public function href(string $rel, array $query = []) : ResourceObject
     {
-        [$method, $uri] = $this->anchor->href($rel, $this->request, $query);
-        /** @psalm-suppress MixedMethodCall */
-        $resourceObject = $this->{$method}->uri($uri)->addQuery($query)->eager->request();
-        assert($resourceObject instanceof ResourceObject);
+        list($method, $uri) = $this->anchor->href($rel, $this->request, $query);
 
-        return $resourceObject;
+        return $this->{$method}->uri($uri)->addQuery($query)->eager->request();
     }
 
     public function get(string $uri, array $query = []) : ResourceObject
@@ -177,7 +176,7 @@ final class Resource implements ResourceInterface
         return $this->methodUri(Request::HEAD, $uri)($query);
     }
 
-    private function methodUri(string $method, string $uri) : RequestInterface
+    private function methodUri(string $method, $uri) : RequestInterface
     {
         $this->method = $method;
 

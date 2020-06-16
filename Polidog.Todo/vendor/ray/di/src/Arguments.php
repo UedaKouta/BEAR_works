@@ -6,7 +6,6 @@ namespace Ray\Di;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Ray\Di\Exception\Unbound;
-use ReflectionMethod;
 
 final class Arguments
 {
@@ -15,7 +14,7 @@ final class Arguments
      */
     private $arguments = [];
 
-    public function __construct(ReflectionMethod $method, Name $name)
+    public function __construct(\ReflectionMethod $method, Name $name)
     {
         $parameters = $method->getParameters();
         foreach ($parameters as $parameter) {
@@ -28,14 +27,13 @@ final class Arguments
      *
      * @throws Exception\Unbound
      *
-     * @return array<int, mixed>
+     * @return Argument[]
      */
     public function inject(Container $container) : array
     {
-        $parameters = [];
-        foreach ($this->arguments as $parameter) {
-            /** @psalm-suppress MixedAssignment */
-            $parameters[] = $this->getParameter($container, $parameter);
+        $parameters = $this->arguments;
+        foreach ($parameters as &$parameter) {
+            $parameter = $this->getParameter($container, $parameter);
         }
 
         return $parameters;

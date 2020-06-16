@@ -7,10 +7,9 @@ namespace Ray\Compiler;
 final class PrivateProperty
 {
     /**
-     * @param null|object $object
-     * @param ?mixed      $default
+     * @param object $object
      *
-     * @return mixed
+     * @return null|mixed
      */
     public function __invoke($object, string $prop, $default = null)
     {
@@ -20,7 +19,6 @@ final class PrivateProperty
             return $default;
         }
         $refProp->setAccessible(true);
-        assert(is_object($object));
 
         return $refProp->getValue($object);
     }

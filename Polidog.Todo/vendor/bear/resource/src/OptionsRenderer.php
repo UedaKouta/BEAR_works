@@ -6,8 +6,6 @@ namespace BEAR\Resource;
 
 use BEAR\Resource\Annotation\OptionsBody;
 use const PHP_EOL;
-use ReflectionClass;
-use ReflectionMethod;
 
 /**
  * RFC2616 OPTIONS method renderer
@@ -44,7 +42,7 @@ final class OptionsRenderer implements RenderInterface
     public function render(ResourceObject $ro)
     {
         $ro->headers['Content-Type'] = 'application/json';
-        $allows = $this->getAllows((new ReflectionClass($ro))->getMethods());
+        $allows = $this->getAllows((new \ReflectionClass($ro))->getMethods());
         $ro->headers['Allow'] = implode(', ', $allows);
         $ro->view = $this->optionsBody ? json_encode($this->getEntityBody($ro, $allows), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL : '';
 
@@ -54,13 +52,11 @@ final class OptionsRenderer implements RenderInterface
     /**
      * Return allowed methods
      *
-     * @param ReflectionMethod[] $methods
+     * @param \ReflectionMethod[] $methods
      *
-     * @return string[]
-     *
-     * @psalm-return list<string>
+     * @return array
      */
-    private function getAllows(array $methods) : array
+    private function getAllows(array $methods)
     {
         $allows = [];
         foreach ($methods as $method) {
@@ -74,16 +70,12 @@ final class OptionsRenderer implements RenderInterface
 
     /**
      * Return OPTIONS entity body
-     *
-     * @param list<string> $allows
-     *
-     * @return array<string, array<int|string, array|string>>
      */
     private function getEntityBody(ResourceObject $ro, array $allows) : array
     {
         $mehtodList = [];
         foreach ($allows as $method) {
-            $mehtodList[(string) $method] = ($this->optionsMethod)($ro, $method);
+            $mehtodList[$method] = ($this->optionsMethod)($ro, $method);
         }
 
         return $mehtodList;

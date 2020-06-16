@@ -1,8 +1,6 @@
 <?php
 namespace Ray\Di;
 
-use InvalidArgumentException;
-
 class FakeGearStickProvider implements ProviderInterface
 {
     /**
@@ -27,7 +25,7 @@ class FakeGearStickProvider implements ProviderInterface
         }
 
         if ($type !== 'leather') {
-            throw new InvalidArgumentException('Invalid Gear Stick Type');
+            throw new \InvalidArgumentException('Invalid Gear Stick Type');
         }
 
         return new FakeLeatherGearStick;

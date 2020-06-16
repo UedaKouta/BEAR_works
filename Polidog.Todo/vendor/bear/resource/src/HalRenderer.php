@@ -9,8 +9,6 @@ use Doctrine\Common\Annotations\Reader;
 use function is_array;
 use function is_scalar;
 use Nocarrier\Hal;
-use ReflectionMethod;
-use RuntimeException;
 
 class HalRenderer implements RenderInterface
 {
@@ -44,31 +42,25 @@ class HalRenderer implements RenderInterface
     /**
      * {@inheritdoc}
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
-    public function renderHal(ResourceObject $ro) : void
+    public function renderHal(ResourceObject $ro)
     {
-        /** @psalm-suppress MixedAssignment */
         [$ro, $body] = $this->valuate($ro);
         $method = 'on' . ucfirst($ro->uri->method);
         $hasMethod = method_exists($ro, $method);
-        /** @var list<object> $annotations */
-        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new ReflectionMethod($ro, $method)) : [];
+        $annotations = $hasMethod ? $this->reader->getMethodAnnotations(new \ReflectionMethod($ro, $method)) : [];
         /* @var $annotations Link[] */
         $hal = $this->getHal($ro->uri, (array) $body, $annotations);
         $ro->view = $hal->asJson(true) . PHP_EOL;
         $ro->headers['Content-Type'] = 'application/hal+json';
     }
 
-    /**
-     * @psalm-suppress MixedArrayAssignment
-     */
     private function valuateElements(ResourceObject $ro) : void
     {
         if (! is_array($ro->body)) {
             return;
         }
-        /** @var AbstractRequest|object $embeded */
         foreach ($ro->body as $key => &$embeded) {
             if ($embeded instanceof AbstractRequest) {
                 // @codeCoverageIgnoreStart
@@ -94,12 +86,6 @@ class HalRenderer implements RenderInterface
         return $parentRo->uri->scheme . $parentRo->uri->host !== $childRo->uri->scheme . $childRo->uri->host;
     }
 
-    /**
-     * @param array<int|string, mixed> $body
-     *
-     * @psalm-param list<object>       $annotations
-     * @phpstan-param array<object>    $annotations
-     */
     private function getHal(AbstractUri $uri, array $body, array $annotations) : Hal
     {
         $query = $uri->query ? '?' . http_build_query($uri->query) : '';
@@ -107,16 +93,12 @@ class HalRenderer implements RenderInterface
         $selfLink = $this->link->getReverseLink($path);
         $hal = new Hal($selfLink, $body);
 
-        /** @var array{_links?: array<string, array{href: string}>} $body */
         return $this->link->addHalLink($body, $annotations, $hal);
     }
 
-    /**
-     * @return array{0: ResourceObject, 1: array<int|string, mixed>|mixed}
-     */
     private function valuate(ResourceObject $ro) : array
     {
-        if (is_scalar($ro->body)) {
+        if (is_scalar($ro->body) && $ro->body !== null) {
             $ro->body = ['value' => $ro->body];
         }
         // evaluate all request in body.

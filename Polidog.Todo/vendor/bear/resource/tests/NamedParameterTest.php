@@ -24,7 +24,7 @@ class NamedParameterTest extends TestCase
         $this->params = new NamedParameter(new NamedParamMetas(new ArrayCache, new AnnotationReader), new Injector);
     }
 
-    public function testGetParameters() : void
+    public function testGetParameters()
     {
         $object = new FakeParamResource;
         $namedArgs = ['id' => 1, 'name' => 'koriym'];
@@ -32,7 +32,7 @@ class NamedParameterTest extends TestCase
         $this->assertSame([1, 'koriym'], $args);
     }
 
-    public function testDefaultValue() : void
+    public function testDefaultValue()
     {
         $object = new FakeParamResource;
         $namedArgs = ['id' => 1];
@@ -40,7 +40,7 @@ class NamedParameterTest extends TestCase
         $this->assertSame([1, 'koriym'], $args);
     }
 
-    public function testParameterException() : void
+    public function testParameterException()
     {
         $this->expectException(ParameterException::class);
         $object = new FakeParamResource;
@@ -48,7 +48,7 @@ class NamedParameterTest extends TestCase
         $this->params->getParameters([$object, 'onGet'], $namedArgs);
     }
 
-    public function testParameterWebContext() : void
+    public function testParameterWebContext()
     {
         $fakeGlobals = [
             '_COOKIE' => ['c' => 'cookie_val'],
@@ -70,7 +70,7 @@ class NamedParameterTest extends TestCase
         $this->assertSame($expected, $args);
     }
 
-    public function testParameterWebContextNotExits() : void
+    public function testParameterWebContextNotExits()
     {
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
@@ -78,7 +78,7 @@ class NamedParameterTest extends TestCase
         $args = $this->params->getParameters([$object, 'onPut'], ['cookie' => 1]); // should be ignored
     }
 
-    public function testParameterWebContextDefault() : void
+    public function testParameterWebContextDefault()
     {
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
         $object = new FakeParamResource;
@@ -89,7 +89,7 @@ class NamedParameterTest extends TestCase
         $this->assertSame($expected, $args);
     }
 
-    public function testParameterWebContexRequiredNotGiven() : void
+    public function testParameterWebContexRequiredNotGiven()
     {
         $this->expectException(ParameterException::class);
         AssistedWebContextParam::setSuperGlobalsOnlyForTestingPurpose([]);
@@ -97,7 +97,7 @@ class NamedParameterTest extends TestCase
         $args = $this->params->getParameters([$object, 'onDelete'], []);
     }
 
-    public function testCameCaseParam() : void
+    public function testCameCaseParam()
     {
         $object = new FakeCamelCaseParamResource;
         $namedArgs = ['user_id' => 'koriym', 'user_role' => 'lead'];
