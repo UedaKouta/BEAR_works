@@ -1,8 +1,4 @@
-.env
-.php_cs
-.php_cs.cache
-.DS_Store
-/.idea/
+
 /var/log/*
 !var/log/.gitkeep
 /var/tmp/*
