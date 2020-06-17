@@ -1,13 +1,16 @@
 <?php
 namespace Polidog\Todo\Module;
 
-use BEAR\Package\AbstractAppModule;
 use BEAR\Package\PackageModule;
+
+use Polidog\Todo\Form\TodoForm;
+use BEAR\Package\AbstractAppModule;
 use BEAR\Sunday\Module\Constant\NamedModule;
 use josegonzalez\Dotenv\Loader as Dotenv;
 use Koriym\Now\NowModule;
 use Koriym\QueryLocator\QueryLocatorModule;
-use Polidog\Todo\Form\TodoForm;
+use BEAR\Package\Provide\Router\AuraRouterModule;
+
 use Ray\AuraSqlModule\AuraSqlModule;
 use Ray\Di\AbstractModule;
 use Ray\WebFormModule\AuraInputModule;
@@ -35,5 +38,8 @@ class AppModule extends AbstractAppModule
         $this->bind(FormInterface::class)->annotatedWith('todo_form')->to(TodoForm::class);
 
         $this->install(new PackageModule);
+
+        $this->install(new AuraRouterModule(dirname(dirname(__DIR__)). '/var/conf/aura.route.php'));
+
     }
 }

@@ -29,6 +29,11 @@
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a> -->
                                             <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a>
+
+                                                                <div class="panel-body">
+                                                                  {{ delete_form|raw }}
+
+                                                                </div>
                                         {% endif %}
                                     </td>
                                 </tr>
