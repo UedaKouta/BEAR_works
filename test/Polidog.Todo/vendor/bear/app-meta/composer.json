@@ -1,0 +1,36 @@
+{
+    "name": "bear/app-meta",
+    "description":"BEAR.Sunday application meta information",
+    "keywords":[
+        "BEAR.Sunday"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2.0",
+        "koriym/psr4list": "^1.0.2"
+    },
+    "autoload":{
+        "psr-4":{
+            "BEAR\\AppMeta\\": ["src/", "src-deprecated"]
+        }
+    },
+    "autoload-dev":{
+        "psr-4":{
+            "BEAR\\AppMeta\\": ["tests/", "tests/Fake"],
+            "FakeVendor\\HelloWorld\\": "tests/Fake/fake-app/src",
+            "FakeVendor\\NotWritable\\": "tests/Fake/fake-not-writable/src"
+        }
+    },
+    "require-dev": {
+        "bear/resource": "^1.0",
+        "phpunit/phpunit": "^7.5"
+    },
+    "scripts" :{
+        "test": ["phpunit"],
+        "tests": ["@cs", "phpstan analyse -l max src tests -c phpstan.neon --no-progress", "psalm --show-info=false", "@test"],
+        "coverage": ["php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
+        "cs": ["php-cs-fixer fix -v --dry-run", "phpcs --standard=./phpcs.xml src"],
+        "cs-fix": ["php-cs-fixer fix -v", "phpcbf src"],
+        "metrics": ["phpmetrics --report-html=build/metrics/ --extensions=php src,composer.json,composer.lock"]
+    }
+}

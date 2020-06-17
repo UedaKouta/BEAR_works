@@ -3,8 +3,6 @@
 .php_cs.cache
 .DS_Store
 /.idea/
-/vendor/
-/build/
 /var/log/*
 !var/log/.gitkeep
 /var/tmp/*
@@ -16,4 +14,3 @@
 !var/tmp/di/.gitkeep
 phpunit.xml
 /docs/api/
-autoload.php
