@@ -13,4 +13,3 @@
 /var/tmp/di/*
 !var/tmp/di/.gitkeep
 phpunit.xml
-/docs/api/
