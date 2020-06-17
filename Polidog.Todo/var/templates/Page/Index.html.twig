@@ -27,8 +27,8 @@
                                         {% if todo.status == 1 %}
                                             <!-- <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a> -->
-                                            <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
-                                            <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a>
+                                            <a class="btn btn-success" href="/done/{{ todo.id }}">Done</a>
+                                            <a class="btn btn-danger" href="/delete/{{ todo.id }}">del</a>
 
                                                                 <div class="panel-body">
                                                                   {{ delete_form|raw }}
