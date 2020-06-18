@@ -13,8 +13,6 @@ class Delete extends ResourceObject
     public function onGet($id)
     {
 
-error_log("[". date('Y-m-d H:i:s') . dirname(__DIR__). "にてゲット_Delete.php\n" , 3, "/var/app/current/log/debug.log");
-
         /** @var ResourceObject $res */
         $res = $this->resource
             ->delete

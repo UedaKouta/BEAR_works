@@ -4,10 +4,8 @@ namespace Polidog\Todo\Resource\Page;
 use BEAR\Package\AppInjector;
 use BEAR\Resource\ResourceInterface;
 use PHPUnit\Framework\TestCase;
-use Koriym\HttpConstants\StatusCode;
 
-
-class IndexTest extends TestCase
+class DoneTest extends TestCase
 {
     /**
      * @var ResourceInterface
@@ -21,14 +19,8 @@ class IndexTest extends TestCase
 
     public function testOnGet()
     {
-        $page = $this->resource->get('page://self/index', ['status' => '1']);
-        $this->assertSame(200, $page->code);
-    }
-
-    public function testCreateTodo()
-    {
-        $page = $this->resource->get('page://self/index', ['title' => 'testdata']);
-        $this->assertSame(200, $page->code);
+        $page = $this->resource->get('page://self/done', ['id' => '1']);
+        $this->assertSame(301, $page->code);
     }
 
 }
