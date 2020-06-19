@@ -10,7 +10,7 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Ray\WebFormModule\Annotation\FormValidation;
 use Ray\WebFormModule\FormInterface;
-class Index_1399552337 extends \Polidog\Todo\Resource\Page\Index implements WeavedInterface
+class Index_1173972684 extends \Polidog\Todo\Resource\Page\Index implements WeavedInterface
 {
     public $bind;
     public $bindings = [];
