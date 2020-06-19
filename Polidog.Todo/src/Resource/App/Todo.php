@@ -68,4 +68,5 @@ class Todo extends ResourceObject
         $this->code = 202;
         $this->headers['location'] = '/todo/?id=' . $id;
     }
+
 }

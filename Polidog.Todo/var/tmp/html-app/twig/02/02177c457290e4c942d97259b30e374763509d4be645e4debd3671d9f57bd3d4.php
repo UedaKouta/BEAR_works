@@ -74,7 +74,7 @@ class __TwigTemplate_4b5796c13bf9b635d11fcb804a244d553fda958031e3723ab75631cdaaa
     public function block_title($context, array $blocks = [])
     {
         $macros = $this->macros;
-        echo "Welcome!";
+        echo "タスク管理一覧|BEAR.sunday";
     }
 
     // line 6

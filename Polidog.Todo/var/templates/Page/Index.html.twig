@@ -33,8 +33,9 @@
                                         {% if todo.status == 1 %}
                                             <!-- <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a> -->
-                                            <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
-                                            <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a>
+                                            <a class="btn btn-success" href="/done?id={{ todo.id }}">完了</a>
+                                            <a class="btn btn-danger" href="/delete?id={{ todo.id }}">削除</a>
+                                            <a class="btn btn-primary" href="/edit?id={{ todo.id }}">編集</a>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -42,22 +43,22 @@
                             </tbody>
                         </table>
 
-                    {% else %}
-                        <div class="panel-body">
-                            <p>タスクがありません</p>
-                        </div>
-                    {% endif %}
+                        {% else %}
+                            <div class="panel-body">
+                                <p>タスクがありません</p>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">新規作成</div>
-                <div class="panel-body">
-                    {{ todo_form|raw }}
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">新規作成</div>
+                    <div class="panel-body">
+                        {{ todo_form|raw }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}

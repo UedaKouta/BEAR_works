@@ -8,6 +8,7 @@ use josegonzalez\Dotenv\Loader as Dotenv;
 use Koriym\Now\NowModule;
 use Koriym\QueryLocator\QueryLocatorModule;
 use Polidog\Todo\Form\TodoForm;
+use Polidog\Todo\Form\TodoEditForm;
 use Ray\AuraSqlModule\AuraSqlModule;
 use Ray\Di\AbstractModule;
 use Ray\WebFormModule\AuraInputModule;
@@ -35,7 +36,9 @@ class AppModule extends AbstractAppModule
         $this->install(new AuraInputModule());
 
         $this->bind(TodoForm::class);
+        $this->bind(TodoEditForm::class);
         $this->bind(FormInterface::class)->annotatedWith('todo_form')->to(TodoForm::class);
+        $this->bind(FormInterface::class)->annotatedWith('todo_edit_form')->to(TodoEditForm::class);
 
         $this->install(new PackageModule);
     }
