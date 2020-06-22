@@ -1,0 +1,10 @@
+parameters:
+  level: max
+  paths:
+    - src
+    - tests
+  excludes_analyse:
+    - '%currentWorkingDirectory%/tests/tmp/*'
+    - '%currentWorkingDirectory%/tests/Fake/*'
+  autoload_files:
+    - 'vendor/autoload.php'

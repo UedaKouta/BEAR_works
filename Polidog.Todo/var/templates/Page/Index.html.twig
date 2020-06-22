@@ -34,9 +34,19 @@
                                         {% if todo.status == 1 %}
                                             <!-- <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a> -->
+<<<<<<< HEAD
                                             <a class="btn btn-success" href="/done?id={{ todo.id }}">完了</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">削除</a>
                                             <a class="btn btn-primary" href="/edit?id={{ todo.id }}">編集</a>
+=======
+                                            <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
+                                            <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a>
+
+                                                                <div class="panel-body">
+                                                                  {{ delete_form|raw }}
+
+                                                                </div>
+>>>>>>> master
                                         {% endif %}
                                     </td>
                                 </tr>

@@ -1,0 +1,11 @@
+.idea
+vendor
+tmp
+*.log
+build
+cache.properties
+composer.phar
+composer.lock
+.DS_Store
+.php_cs.cache
+.phpunit.result.cache

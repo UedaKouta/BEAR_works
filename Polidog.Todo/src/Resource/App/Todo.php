@@ -44,8 +44,8 @@ class Todo extends ResourceObject
         $id = $this->pdo->lastInsertId();
 
         $this->code = 201;
-        $this->headers['Location'] = "/todo/?id={$id}";
-
+        $this->headers['Location'] = "/todo?id={$id}";
+return $this;
     }
 
     public function onPut($id, $status)

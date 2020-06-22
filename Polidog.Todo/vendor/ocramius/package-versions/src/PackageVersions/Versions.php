@@ -28,11 +28,13 @@ final class Versions
   'aura/html' => '2.5.0@eda14b491f45fe2e1d1fec3364b1c783d7b7da31',
   'aura/input' => '1.2.1@e9805708280c64e72573ccc60c2cd9972a6459b8',
   'aura/installer-default' => '1.0.0@52f8de3670cc1ef45a916f40f732937436d028c8',
+  'aura/router' => '3.1.0@52507bc813c92511dbcacc7463f163ef5149ad38',
   'aura/session' => '2.1.0@7d2f7d41ad693970b5b6b83facca0961d3378883',
   'aura/sql' => '2.6.0@16206efbe5ba63603fe3b18ba54a4c5296cd5f3e',
   'aura/sqlquery' => '2.7.1@dd81b57aeb43628180a9c70a4df58d872024d7f2',
   'aws/aws-sdk-php' => '3.142.0@0d1c6f5cc98640af39c0ea77f329ada775b70fe6',
   'bear/app-meta' => '1.6.1@01842581e63991472ec775a04ea413dec1bfaae6',
+  'bear/aura-router-module' => '2.1.0@2f4ddd5b6deb0ecf09d03eb2ae31ed00ad0d46cf',
   'bear/package' => '1.9.7@95b050b41fcb1557599a1279c1ae2a1dd35af4e6',
   'bear/query-repository' => '1.6.7@5604d52ee2c28d50ead368684f7ccd7b9580e1bf',
   'bear/resource' => '1.14.2@a1a66b90af2e9e4434340c5b8e503dcc6691cf1e',
@@ -49,6 +51,9 @@ final class Versions
   'justinrainbow/json-schema' => '5.2.10@2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b',
   'koriym/http-constants' => '1.1.5@b8d0b27883b7f68856a5667cf2a2ea80e6610c68',
   'koriym/psr4list' => '1.0.2@9d9dd97730c0b179b5b235280f69ff6698c47767',
+  'laminas/laminas-dependency-plugin' => '1.0.4@38bf91861f5b4d49f9a1c530327c997f7a7fb2db',
+  'laminas/laminas-diactoros' => '1.8.7p2@6991c1af7c8d2c8efee81b22ba97024781824aaa',
+  'laminas/laminas-zendframework-bridge' => '1.0.4@fcd87520e4943d968557803919523772475e8ea3',
   'madapaja/twig-module' => '2.2.1@1bb996eef869b324e9635ff270d3ce95f556813e',
   'mobiledetect/mobiledetectlib' => '2.8.34@6f8113f57a508494ca36acbcfa2dc2d923c7ed5b',
   'monolog/monolog' => '2.1.0@38914429aac460e8e4616c8cb486ecb40ec90bb1',
@@ -148,7 +153,7 @@ final class Versions
   'vimeo/psalm' => '3.11.5@3c60609c218d4d4b3b257728b8089094e5c6c6c2',
   'webmozart/glob' => '4.1.0@3cbf63d4973cf9d780b93d2da8eec7e4a9e63bbe',
   'webmozart/path-util' => '2.3.0@d939f7edc24c9a1bb9c0dee5cb05d8e859490725',
-  'polidog/todo' => 'dev-work@7889a576e182d970c59d22cfa292fcab690143c2',
+  'polidog/todo' => 'dev-master@a7023df40bd753266cfcc6717c457f49d898a981',
 );
 
     private function __construct()
