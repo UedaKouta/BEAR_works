@@ -45,7 +45,11 @@ class TodoFormTest extends TestCase
         $formHtml = (string) $this->form;
         $expected = '<form method="post" action="/" enctype="multipart/form-data"><div class="form-group"><input id="title" type="text" name="title" class="form-control" size="20" />
 </div>
+<<<<<<< HEAD
+<input type="submit" name="submit" value="登録" class="btn btn-primary" />
+=======
 <input type="submit" name="submit" value="Add" class="btn btn-primary" />
+>>>>>>> master
 </form>';
         $this->assertSame($expected, $formHtml);
     }

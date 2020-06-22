@@ -7,6 +7,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">タスク一覧</div>
                 <div class="panel-body">
+                    <ul class="nav nav-tabs">
+  　　　　　　　　　       <li role="presentation"{% if status == 0 %} class="active"{% endif %}><a href="/">all</a></li>
+                        <li role="presentation"{% if status == 1 %} class="active"{% endif %}><a href="/?status=1">未完了</a></li>
+                        <li role="presentation"{% if status == 2 %} class="active"{% endif %}><a href="/?status=2">完了</a></li>
+                    </ul>
+
                     {% if todos %}
                         <table class="table">
                             <thead>
@@ -22,11 +28,17 @@
                                 <tr>
                                     <td>{{ todo.id }}</td>
                                     <td>{{ todo.title }}</td>
-                                    <td>{{ todo.createdAt|date("Y/m/d H:i:s") }}</td>
+                                    {# <td>{{ todo.created|date("Y/m/d H:i:s") }}</td> #}
+                                    <td>{{ todo.created }}</td>
                                     <td>
                                         {% if todo.status == 1 %}
                                             <!-- <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a> -->
+<<<<<<< HEAD
+                                            <a class="btn btn-success" href="/done?id={{ todo.id }}">完了</a>
+                                            <a class="btn btn-danger" href="/delete?id={{ todo.id }}">削除</a>
+                                            <a class="btn btn-primary" href="/edit?id={{ todo.id }}">編集</a>
+=======
                                             <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>
                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">del</a>
 
@@ -34,6 +46,7 @@
                                                                   {{ delete_form|raw }}
 
                                                                 </div>
+>>>>>>> master
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -41,22 +54,22 @@
                             </tbody>
                         </table>
 
-                    {% else %}
-                        <div class="panel-body">
-                            <p>タスクがありません</p>
-                        </div>
-                    {% endif %}
+                        {% else %}
+                            <div class="panel-body">
+                                <p>タスクがありません</p>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">新規作成</div>
-                <div class="panel-body">
-                    {{ todo_form|raw }}
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">新規作成</div>
+                    <div class="panel-body">
+                        {{ todo_form|raw }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
