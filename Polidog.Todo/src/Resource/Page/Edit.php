@@ -17,7 +17,6 @@ use ResourceInject;
  * @var FormInterface
  */
 public $todoEditForm;
-public $targetId;
 /**
  * @Inject()
  * @Named("todoEditForm=todo_edit_form")
@@ -34,9 +33,7 @@ public function onGet(string $id = null)
 {
     $this['todo_edit_form'] = $this->todoEditForm;
 
-    $this['id'] =  $id;
-    $this->targetId   =  $id;
-    error_log("[". date('Y-m-d H:i:s') ."ID:  ". $this->targetId. "にてゲット\n" , 3, "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/log/debug.log");
+    // error_log("[". date('Y-m-d H:i:s') ."ID:  ". $this->targetId. "にてゲット\n" , 3, "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/log/debug.log");
 
     $this['todos'] = $this->resource
         ->get
@@ -54,14 +51,17 @@ public function onGet(string $id = null)
  */
 public function onPost($todo = [])
 {
-    return $this->editTodo($todo['title']);
+    return $this->editTodo($todo['title'],$todo['id']);
 
 }
 
 public function onFailure()
 {
     $this->code = 400;
-    return $this->onGet($this->targetId);
+    if($_GET['id']){
+        $id = $_GET['id'];
+    }
+    return $this->onGet($id);
 }
 
 /**
@@ -69,14 +69,14 @@ public function onFailure()
  * @param string $title
  * @return $this
  */
-public function editTodo($title)
+public function editTodo($title,$id)
 {
-
+    
     $request = $this->resource
         ->post
         ->uri("app://self/todoedit")
         ->withQuery([
-          'id' => $this->targetId,
+          'id' => $id,
           'title' => $title
         ])
         ->eager
@@ -86,7 +86,7 @@ public function editTodo($title)
     $this->headers['location'] = "/";
     $this['todo_edit_form'] = $this->todoEditForm;
     // return $this;
-    return $this->onGet();
+    return $this->onGet($id);
 }
 
 }

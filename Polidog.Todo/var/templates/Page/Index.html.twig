@@ -28,7 +28,8 @@
                                 <tr>
                                     <td>{{ todo.id }}</td>
                                     <td>{{ todo.title }}</td>
-                                    <td>{{ todo.createdAt|date("Y/m/d H:i:s") }}</td>
+                                    {# <td>{{ todo.created|date("Y/m/d H:i:s") }}</td> #}
+                                    <td>{{ todo.created }}</td>
                                     <td>
                                         {% if todo.status == 1 %}
                                             <!-- <a class="btn btn-success" href="/done?id={{ todo.id }}">Done</a>

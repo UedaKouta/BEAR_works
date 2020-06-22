@@ -20,12 +20,25 @@ class TodoEditForm extends AbstractForm
     public function init()
     {
 
+        if($_GET['id']){
+            $id = $_GET['id'];
+        }
+
         $this->setField('title')
             ->setAttribs([
                 'id' => 'todo[title]',
                 'name' => 'todo[title]',
                 'class' => 'form-control',
                 'size' => 20
+            ]);
+
+            $this->setField('id', 'hidden')
+            ->setValue($id)
+            ->setAttribs([
+                'id' => 'todo[id]',
+                'name' => 'todo[id]',
+                'class' => 'form-control',
+                'size' => 20,
             ]);
 
         $this->setField('submit', 'submit')
@@ -35,13 +48,7 @@ class TodoEditForm extends AbstractForm
                 'class' => 'btn btn-primary'
             ]);
 
-    $this->setField('id')
-     ->setValue('{{ todo.id }}')
-     ->setAttribs([
-         'id' => 'todo[id]',
-         'name' => 'todo[id]',
-         'size' => 20,
-     ]);
+
 
         // validationの設定
         $this->filter->validate('title')->is('strlenMin', 1);
@@ -50,9 +57,13 @@ class TodoEditForm extends AbstractForm
 
     public function __toString()
     {
+
+        if($_GET['id']){
+            $id = $_GET['id'];
+        }
         $form = $this->form([
             'method' => 'post',
-            'action' => '/edit',
+            'action' => '/edit?id='.$id ,
         ]);
 
         /** @var Tag $tag */
@@ -62,6 +73,10 @@ class TodoEditForm extends AbstractForm
         $form .= $this->error('title');
         $form .= $this->helper->tag('/div') . PHP_EOL;
 
+        $form .= $tag('div', ['class' => 'form-group']);
+        $form .= $this->input('id');
+        $form .= $this->error('id');
+        $form .= $this->helper->tag('/div') . PHP_EOL;
         // submit
         $form .= $this->input('submit');
         $form .= $this->helper->tag('/form');
