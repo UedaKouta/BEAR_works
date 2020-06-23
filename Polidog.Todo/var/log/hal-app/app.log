@@ -1,1 +1,0 @@
-[2020-06-04T08:45:15.852491+00:00] DEBUG: req:"get page://self/favicon.ico" code:404 e:BEAR\Resource\Exception\ResourceNotFoundException(page://self/favicon.ico) logref:dbf3fe8a []

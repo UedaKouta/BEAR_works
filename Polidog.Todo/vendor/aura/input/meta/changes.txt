@@ -1,3 +1,0 @@
-# 1.2.1
-
-* Fixed addMessages behavior in Filter class, see https://github.com/auraphp/Aura.Input/pull/64
