@@ -3,6 +3,12 @@
     "type": "project",
     "license": "proprietary",
     "description": "",
+    "repositories": [
+            {
+                "type": "vcs",
+                "url": "https://github.com/Tavicu/bootstrap-confirmation.git"
+            }
+        ],
     "require": {
         "php": ">=7.2.0",
         "bear/package": "^1.9",
@@ -11,7 +17,9 @@
         "ray/web-form-module": "^0.6.0",
         "aws/aws-sdk-php": "^3.142",
         "bear/aura-router-module": "^2.0",
-        "symfony/console": "4.4.*"
+        "symfony/console": "4.4.*",
+        "swiftmailer/swiftmailer": "@stable",
+        "tavicu/bootstrap-confirmation": "dev-master"
     },
     "require-dev": {
         "bear/qatools": "^1.9",
