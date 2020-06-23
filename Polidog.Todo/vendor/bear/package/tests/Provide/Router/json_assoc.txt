@@ -1,6 +1,0 @@
-{
-    "franeworks": [
-        {"name": "BEAR.Sunday v1.0", "age": 0},
-        {"name": "zend", "age": 9}
-    ]
-}

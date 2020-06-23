@@ -1,1 +1,0 @@
-{'Organization': 'PHP Documentation Team'}

@@ -33,8 +33,6 @@ public function onGet(string $id = null)
 {
     $this['todo_edit_form'] = $this->todoEditForm;
 
-    // error_log("[". date('Y-m-d H:i:s') ."ID:  ". $this->targetId. "にてゲット\n" , 3, "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/log/debug.log");
-
     $this['todos'] = $this->resource
         ->get
         ->uri('app://self/todoedit')
