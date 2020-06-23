@@ -9,13 +9,8 @@ use BEAR\Sunday\Module\Constant\NamedModule;
 use josegonzalez\Dotenv\Loader as Dotenv;
 use Koriym\Now\NowModule;
 use Koriym\QueryLocator\QueryLocatorModule;
-<<<<<<< HEAD
-use Polidog\Todo\Form\TodoForm;
 use Polidog\Todo\Form\TodoEditForm;
-=======
 use BEAR\Package\Provide\Router\AuraRouterModule;
-
->>>>>>> master
 use Ray\AuraSqlModule\AuraSqlModule;
 use Ray\Di\AbstractModule;
 use Ray\WebFormModule\AuraInputModule;

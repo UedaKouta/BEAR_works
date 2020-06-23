@@ -103,37 +103,30 @@ class __TwigTemplate_355ca088f316024e89cd8519b8e7ab1bb8175fbc73ec40cf77cc543657f
                 // line 30
                 echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "title", [], "any", false, false, false, 30), "html", null, true);
                 echo "</td>
-                                    <td>";
-                // line 31
-                echo twig_escape_filter($this->env, twig_date_format_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "createdAt", [], "any", false, false, false, 31), "Y/m/d H:i:s"), "html", null, true);
+                                    ";
+                // line 32
+                echo "                                    <td>";
+                echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "created", [], "any", false, false, false, 32), "html", null, true);
                 echo "</td>
                                     <td>
                                         ";
-                // line 33
-                if ((twig_get_attribute($this->env, $this->source, $context["todo"], "status", [], "any", false, false, false, 33) == 1)) {
-                    // line 34
-                    echo "                                            <!-- <a class=\"btn btn-success\" href=\"/done?id=";
-                    echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 34), "html", null, true);
-                    echo "\">Done</a>
-                                            <a class=\"btn btn-danger\" href=\"/delete?id=";
+                // line 34
+                if ((twig_get_attribute($this->env, $this->source, $context["todo"], "status", [], "any", false, false, false, 34) == 1)) {
                     // line 35
+                    echo "                                            <a class=\"btn btn-success\" href=\"/done?id=";
                     echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 35), "html", null, true);
-                    echo "\">del</a> -->
-                                            <a class=\"btn btn-success\" href=\"/done?id=";
-                    // line 36
-                    echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 36), "html", null, true);
                     echo "\">完了</a>
                                             <a class=\"btn btn-danger\" href=\"/delete?id=";
-                    // line 37
-                    echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 37), "html", null, true);
+                    // line 36
+                    echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 36), "html", null, true);
                     echo "\">削除</a>
                                             <a class=\"btn btn-primary\" href=\"/edit?id=";
-                    // line 38
-                    echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 38), "html", null, true);
+                    // line 37
+                    echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["todo"], "id", [], "any", false, false, false, 37), "html", null, true);
                     echo "\">編集</a>
                                         ";
                 }
-                // line 40
+                // line 39
                 echo "                                    </td>
                                 </tr>
                             ";
@@ -141,19 +134,19 @@ class __TwigTemplate_355ca088f316024e89cd8519b8e7ab1bb8175fbc73ec40cf77cc543657f
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['todo'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 43
+            // line 42
             echo "                            </tbody>
                         </table>
 
                         ";
         } else {
-            // line 47
+            // line 46
             echo "                            <div class=\"panel-body\">
                                 <p>タスクがありません</p>
                             </div>
                         ";
         }
-        // line 51
+        // line 50
         echo "                    </div>
                 </div>
 
@@ -163,7 +156,7 @@ class __TwigTemplate_355ca088f316024e89cd8519b8e7ab1bb8175fbc73ec40cf77cc543657f
                     <div class=\"panel-heading\">新規作成</div>
                     <div class=\"panel-body\">
                         ";
-        // line 59
+        // line 58
         echo ($context["todo_form"] ?? null);
         echo "
                     </div>
@@ -185,7 +178,7 @@ class __TwigTemplate_355ca088f316024e89cd8519b8e7ab1bb8175fbc73ec40cf77cc543657f
 
     public function getDebugInfo()
     {
-        return array (  167 => 59,  157 => 51,  151 => 47,  145 => 43,  137 => 40,  132 => 38,  128 => 37,  124 => 36,  120 => 35,  115 => 34,  113 => 33,  108 => 31,  104 => 30,  100 => 29,  97 => 28,  93 => 27,  81 => 17,  79 => 16,  71 => 13,  65 => 12,  59 => 11,  50 => 4,  46 => 3,  35 => 1,);
+        return array (  160 => 58,  150 => 50,  144 => 46,  138 => 42,  130 => 39,  125 => 37,  121 => 36,  116 => 35,  114 => 34,  108 => 32,  104 => 30,  100 => 29,  97 => 28,  93 => 27,  81 => 17,  79 => 16,  71 => 13,  65 => 12,  59 => 11,  50 => 4,  46 => 3,  35 => 1,);
     }
 
     public function getSourceContext()

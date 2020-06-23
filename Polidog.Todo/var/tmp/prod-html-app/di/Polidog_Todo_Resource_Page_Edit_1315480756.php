@@ -22,7 +22,7 @@ class Edit_1315480756 extends \Polidog\Todo\Resource\Page\Edit implements Weaved
      * @param string $title
      * @return $this
      */
-    public function editTodo($title)
+    public function editTodo($title, $id)
     {
         if (!$this->isAspect) {
             $this->isAspect = true;

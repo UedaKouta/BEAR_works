@@ -22,6 +22,8 @@ class TodoEditForm extends AbstractForm
 
         if($_GET['id']){
             $id = $_GET['id'];
+        }else{
+            $id = null;
         }
 
         $this->setField('title')

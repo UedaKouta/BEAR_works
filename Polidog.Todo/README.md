@@ -36,3 +36,6 @@
 
 ## 画面
 ![min](https://user-images.githubusercontent.com/27049632/84008848-5b096480-a9ad-11ea-91c3-27e686e9213f.png)
+
+編集追加後
+![min](https://user-images.githubusercontent.com/27049632/85348000-29f46c80-b535-11ea-80a3-f9eae992740f.png)

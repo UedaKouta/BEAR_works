@@ -141,7 +141,7 @@ final class Versions
   'vimeo/psalm' => '3.11.5@3c60609c218d4d4b3b257728b8089094e5c6c6c2',
   'webmozart/glob' => '4.1.0@3cbf63d4973cf9d780b93d2da8eec7e4a9e63bbe',
   'webmozart/path-util' => '2.3.0@d939f7edc24c9a1bb9c0dee5cb05d8e859490725',
-  'polidog/todo' => 'No version set (parsed as 1.0.0)@',
+  'polidog/todo' => 'dev-work@871944a2b0533c776de08c990021302afcda037e',
 );
 
     private function __construct()
