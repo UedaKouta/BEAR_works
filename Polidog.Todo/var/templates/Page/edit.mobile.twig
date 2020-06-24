@@ -1,0 +1,50 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block content %}
+    <h1 class="page-header">タスク</h1>
+    <div class="row">
+        <div class="col-sm-15">
+            <div class="panel panel-default">
+                <div class="panel-heading">タスク編集</div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+  　　　　　　　　　       <li role="presentation"><a href="/">戻る</a></li>
+                    </ul>
+
+                    {% if todos %}
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>CreatedAt</th>
+                                <th> </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for todo in todos %}
+                                <tr>
+                                    <td>{{ todo.id }}</td>
+                                    <td>{{ todo.title }}</td>
+                                    <td>{{ todo.createdAt|date("Y/m/d H:i:s") }}</td>
+                                    <td>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    {% else %}
+                        <div class="panel-body">
+                            <p>タスクがありません</p>
+                        </div>
+                    {% endif %}
+                    {{ todo_edit_form|raw }}
+ 
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

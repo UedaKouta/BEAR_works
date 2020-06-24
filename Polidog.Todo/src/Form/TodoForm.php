@@ -44,7 +44,7 @@ class TodoForm extends AbstractForm
     {
         $form = $this->form([
             'method' => 'post',
-            'action' => '/',
+            'action' => '/'
         ]);
 
         /** @var Tag $tag */
