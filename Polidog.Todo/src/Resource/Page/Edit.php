@@ -70,7 +70,7 @@ public function onFailure()
 public function editTodo($title,$id)
 {
     
-error_log("[". date('Y-m-d H:i:s') . dirname(__DIR__).$title."と".$id ."にてゲット\n" , 3, "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/log/debug.log");
+// error_log("[". date('Y-m-d H:i:s') . dirname(__DIR__).$title."と".$id ."にてゲット\n" , 3, "/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/log/debug.log");
 
     $request = $this->resource
         ->post
