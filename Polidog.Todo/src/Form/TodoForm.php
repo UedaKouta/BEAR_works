@@ -24,7 +24,8 @@ class TodoForm extends AbstractForm
             ->setAttribs([
                 'id' => 'todo[title]',
                 'name' => 'todo[title]',
-                'class' => 'form-control',
+    
+                'class' => 'form-control title',
                 'size' => 20
             ]);
 
@@ -32,8 +33,9 @@ class TodoForm extends AbstractForm
             ->setAttribs([
                 'name' => 'submit',
                 'value' => '登録',
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',      
             ]);
+
 
         // validationの設定
         $this->filter->validate('title')->is('strlenMin', 1);
@@ -44,7 +46,7 @@ class TodoForm extends AbstractForm
     {
         $form = $this->form([
             'method' => 'post',
-            'action' => '/'
+            'action' => '/',
         ]);
 
         /** @var Tag $tag */

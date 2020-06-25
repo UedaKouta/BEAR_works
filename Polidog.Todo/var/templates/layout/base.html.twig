@@ -40,13 +40,13 @@
       }
   } #}
 
+  $("#inputClearBtn").on("click", function() {
+      $(this).find('input.title').val('');
+  });
 
-  function checkForm(){
-    if(document.form1.todo[title].value == ""){
-        alert("必須項目を入力して下さい。");
-	return false;
-    }else{
-	return true;
-    }
-}
+    var clearInputInfo = function () {
+    $("#mokujiTable tbody > tr").each(function() {
+      $(this).find('input.form-control').val('');
+    });
+  };
   </script>
