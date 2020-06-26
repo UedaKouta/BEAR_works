@@ -13,26 +13,26 @@ use Ray\WebFormModule\AbstractForm;
 
 class TodoForm extends AbstractForm
 {
-
-    /**
+ /**
      * {@inheritdoc}
      */
     public function init()
     {
-
         $this->setField('title')
             ->setAttribs([
-                'id' => 'todo[title]',
+                'id' => 'title1',
                 'name' => 'todo[title]',
                 'class' => 'form-control',
+                'value' => '',
                 'size' => 20
             ]);
 
         $this->setField('submit', 'submit')
             ->setAttribs([
                 'name' => 'submit',
-                'value' => '登録',
-                'class' => 'btn btn-primary'
+                'value' => '確認',
+                'class' => 'btn btn-primary',
+                'onclick'=> 'return checkForm();'
             ]);
 
         // validationの設定
@@ -43,8 +43,9 @@ class TodoForm extends AbstractForm
     public function __toString()
     {
         $form = $this->form([
-            'method' => 'post',
-            'action' => '/',
+            'method' => 'get',
+            'action' => '/ConfirmationTodo',
+            'name' => 'intodo1',
         ]);
 
         /** @var Tag $tag */

@@ -3,10 +3,12 @@
 {% block content %}
     <h1 class="page-header">タスク</h1>
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-15">
             <div class="panel panel-default">
                 <div class="panel-heading">タスク一覧</div>
+
                 <div class="panel-body">
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#insertModal">新規作成</button>
                     <ul class="nav nav-tabs">
   　　　　　　　　　       <li role="presentation"{% if status == 0 %} class="active"{% endif %}><a href="/">all</a></li>
                         <li role="presentation"{% if status == 1 %} class="active"{% endif %}><a href="/?status=1">未完了</a></li>
@@ -51,11 +53,9 @@
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
                                                             <a class="btn btn-danger" href="/delete?id={{ todo.id }}">はい</a> 
                                                         </div>
-
                                                     </div>
                                                 </div>
                                            </div> #}
-
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -72,6 +72,25 @@
                 </div>
 
             </div>
+        </div>
+
+                                            <div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4>新規作成</h4></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <label>内容を入力してください。</label>
+                                                        </div>
+                                                        <div class="modal-footer">
+                 
+                                                               {{ todo_form|raw }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                           </div>
+{# 
             <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">新規作成</div>
@@ -79,9 +98,7 @@
                         {{ todo_form|raw }}
                     </div>
                 </div>
-            </div>
-        </div>
-
+            </div> #}
 
 
     {% endblock %}

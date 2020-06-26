@@ -43,9 +43,9 @@ class TodoFormTest extends TestCase
     public function testFormView()
     {
         $formHtml = (string) $this->form;
-        $expected = '<form method="post" action="/" enctype="multipart/form-data"><div class="form-group"><input id="todo[title]" type="text" name="todo[title]" class="form-control" size="20" />
+        $expected = '<form method="get" action="/ConfirmationTodo" enctype="multipart/form-data" name="intodo1"><div class="form-group"><input id="title1" type="text" name="todo[title]" class="form-control" value="" size="20" />
 </div>
-<input type="submit" name="submit" value="登録" class="btn btn-primary" />
+<input type="submit" name="submit" value="確認" class="btn btn-primary" onclick="return checkForm();" />
 </form>';
         $this->assertSame($expected, $formHtml);
     }

@@ -23,21 +23,29 @@
 {% block javascripts %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        {# <script type="text/javascript"  src="/Applications/MAMP/htdocs/BEAR_works/Polidog.Todo/js/script2_1.js"></script> #}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js" integrity="sha256-tcqPYPyxU+Fsv5sVdvnxLYJ7Jq9wWpi4twZbtZ0ubY8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js" integrity="sha256-tcqPYPyxU+Fsv5sVdvnxLYJ7Jq9wWpi4twZbtZ0ubY8=" crossorigin="anonymous"></script>
 {% endblock %}
 </body>
 
 </html>
 
 <script type="text/javascript">
-    function kakunin(id){
-     var ret = bootbox.confirm('削除処理を続行してよろしいですか？');
-      var obj = document.getElementById("message");
-      if (ret == true) {
-        location.href = "/delete?id="+ id;
-      } else {
-        obj.innerText = "処理を中止";
-      }
+
+{# function checkForm(){
+    if(document.intodo1.title1.value == ""){
+        alert("必須項目を入力して下さい。");
+	return false;
+    }else{
+	return true;
+    }
+} #}
+
+
+function checkForm(){
+  const title = document.getElementById('title1').value;
+  if(title.length < 1){
+      alert("入力してください");    //エラーメッセージを出力
+       return false;  
   }
+}
   </script>

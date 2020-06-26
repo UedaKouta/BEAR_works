@@ -45,7 +45,7 @@ class Todo extends ResourceObject
 
         $this->code = 201;
         $this->headers['Location'] = "/todo?id={$id}";
-return $this;
+        return $this;
     }
 
     public function onPut($id, $status)

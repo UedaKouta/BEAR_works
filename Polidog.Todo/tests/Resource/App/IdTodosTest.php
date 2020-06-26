@@ -8,7 +8,7 @@ use Koriym\HttpConstants\ResponseHeader;
 use Koriym\HttpConstants\StatusCode;
 use PHPUnit\Framework\TestCase;
 
-class TodoEditTest extends TestCase
+class IdTodosTest extends TestCase
 {
     /**
      * @var \BEAR\Resource\ResourceInterface
@@ -19,17 +19,12 @@ class TodoEditTest extends TestCase
     {
       $this->resource = (new AppInjector('Polidog\Todo', 'app'))->getInstance(ResourceInterface::class);
     }
-
     /**
      * @depends testOnPost
      */
-    public function testOnPost(ResourceObject $ro)
+    public function testOnPost()
     {
-      $ro = $this->resource->get('app://self/todoedit', ['id' => '2']);
-      $this->assertSame(200, $ro->code);
-
-      return $ro;
+        $page = $this->resource->get('page://self/idtodos', ['status' => '1']);
+        $this->assertSame(200, $page->code);
     }
-
-
 }

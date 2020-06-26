@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Koriym\HttpConstants\StatusCode;
 
 
-class EditTest extends TestCase
+class ConfirmationTodoTest extends TestCase
 {
     /**
      * @var ResourceInterface
@@ -21,14 +21,7 @@ class EditTest extends TestCase
 
     public function testOnGet()
     {
-        $page = $this->resource->get('page://self/edit', ['id' => '2']);
-        $this->assertSame(200, $page->code);
+        $page = $this->resource->get('page://self/confirmationtodo', ['todo' => 'testdata']);
+        $this->assertSame(201, $page->code);
     }
-
-    public function testEditTodo()
-    {
-        $page = $this->resource->get('page://self/edit', ['title' => 'testdataEdit','id'=> '2']);
-        $this->assertSame(200, $page->code);
-    }
-
 }
